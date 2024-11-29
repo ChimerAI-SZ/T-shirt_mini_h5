@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap");
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  font-family: "Comfortaa", sans-serif;
+}
