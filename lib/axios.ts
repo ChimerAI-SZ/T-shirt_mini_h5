@@ -6,7 +6,7 @@ import axios, {
   AxiosRequestHeaders,
   AxiosResponseHeaders
 } from "axios"
-import { exitLogin, storage } from "@utils/index"
+import { exitLogin, storage } from "@/utils/index"
 
 interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   cancelToken?: CancelTokenSource["token"]
@@ -36,8 +36,13 @@ declare global {
     }
   }
 }
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL || "/",
+
+// 创建两个 axios 实例，一个用于 API 请求，一个用于外部请求
+export const apiInstance = axios.create({
+  timeout: 30000
+})
+
+export const externalInstance = axios.create({
   timeout: 30000
 })
 
@@ -70,45 +75,48 @@ const removePendingRequest = (config: AxiosRequestConfig): void => {
   }
 }
 
-instance.interceptors.request.use(
-  config => {
-    const extendedConfig = config as ExtendedAxiosRequestConfig
-    removePendingRequest(extendedConfig)
-    addPendingRequest(extendedConfig)
+// 为两个实例添加拦截器
+;[apiInstance, externalInstance].forEach(instance => {
+  instance.interceptors.request.use(
+    config => {
+      const extendedConfig = config as ExtendedAxiosRequestConfig
+      removePendingRequest(extendedConfig)
+      addPendingRequest(extendedConfig)
 
-    const TOKEN = storage.get("token")
-    if (TOKEN) {
-      extendedConfig.headers = extendedConfig.headers || {}
-      extendedConfig.headers["Content-Type"] = extendedConfig.headers["Content-Type"] || "text/plain"
-      extendedConfig.headers.Authorization = TOKEN
+      const TOKEN = storage.get("token")
+      if (TOKEN) {
+        extendedConfig.headers = extendedConfig.headers || {}
+        extendedConfig.headers["Content-Type"] = extendedConfig.headers["Content-Type"] || "text/plain"
+        extendedConfig.headers.Authorization = TOKEN
+      }
+
+      return extendedConfig
+    },
+    error => {
+      return Promise.reject(error)
     }
+  )
 
-    return extendedConfig
-  },
-  error => {
-    return Promise.reject(error)
-  }
-)
-
-instance.interceptors.response.use(
-  (response: AxiosResponse) => {
-    // 在一个 ajax 响应后再执行一下取消操作，把已经完成的请求从 pending 中移除
-    removePendingRequest(response.config)
-    if (response.status === 401) {
-      exitLogin()
+  instance.interceptors.response.use(
+    (response: AxiosResponse) => {
+      // 在一个 ajax 响应后再执行一下取消操作，把已经完成的请求从 pending 中移除
+      removePendingRequest(response.config)
+      if (response.status === 401) {
+        exitLogin()
+      }
+      return response.data
+    },
+    error => {
+      const { status } = error?.response || {}
+      if (status === 500) {
+        window.$message?.destroy()
+        console.error(status)
+      } else if (status === 401) {
+        exitLogin()
+      }
+      return Promise.reject(error)
     }
-    return response.data
-  },
-  error => {
-    const { status } = error?.response || {}
-    if (status === 500) {
-      window.$message?.destroy()
-      console.error(status)
-    } else if (status === 401) {
-      exitLogin()
-    }
-    return Promise.reject(error)
-  }
-)
+  )
+})
 
-export default instance
+export default apiInstance

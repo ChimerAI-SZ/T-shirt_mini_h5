@@ -1,6 +1,6 @@
 import { Group, Flex, Image, Text } from "@chakra-ui/react"
-import { Button } from "@components/ui/button"
-import { DialogContent, DialogRoot } from "@components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { DialogContent, DialogRoot } from "@/components/ui/dialog"
 
 import "react-phone-number-input/style.css"
 import PhoneInput from "react-phone-number-input"

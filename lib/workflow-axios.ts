@@ -6,7 +6,7 @@ import axios, {
   InternalAxiosRequestConfig,
   AxiosRequestHeaders
 } from "axios"
-import { exitLogin, storage } from "@utils/index"
+import { exitLogin, storage } from "@/utils/index"
 // 统一定义一下 axios 返回类型
 export interface AxiosResponse<T = any, D = any> {
   data: T

@@ -24,15 +24,15 @@
     "baseUrl": ".",
     "paths": {
       "@chakra-ui/react": ["../../packages/react/src"],
-      "@img/*": ["./public/assets/images/*"],
-      "@definitions/*": ["./definitions/*"],
+      "@/img/*": ["./public/assets/images/*"],
+      "@/definitions/*": ["./definitions/*"],
       "@/*": ["./src/*"],
-      "@components/*": ["./components/*"],
-      "@lib/*": ["./lib/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@utils/*": ["./utils/*"],
-      "@store/*": ["./store/*"],
-      "@constants/*": ["./constants/*"],
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/utils/*": ["./utils/*"],
+      "@/store/*": ["./store/*"],
+      "@/constants/*": ["./constants/*"],
       
     },
     

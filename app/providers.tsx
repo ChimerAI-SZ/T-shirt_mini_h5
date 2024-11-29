@@ -1,9 +1,9 @@
 "use client"
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 import { Provider } from "react-redux"
-import store from "@store/index"
+import store from "@/store/index"
 import { usePathname, useRouter } from "next/navigation"
-import { Loading } from "@components/Loading"
+import { Loading } from "@/components/Loading"
 import { useEffect, useState } from "react"
 
 export function Providers({ children }: { children: React.ReactNode }) {

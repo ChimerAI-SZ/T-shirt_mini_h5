@@ -1,14 +1,18 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
-
-import { Box, Flex, Image, Button, For } from "@chakra-ui/react"
-import { useRouter } from "next/navigation"
+import { Box, Container } from "@chakra-ui/react"
+import ImageGeneratorInput from "@/components/ImageGeneratorInput"
 
 function Dashboard() {
-  // const { onOpen, onClose } = useDisclosure();
-
-  return <Box>1</Box>
+  return (
+    <Container maxW="container.xl" py={8}>
+      <Box display="flex" flexDirection="column" gap={8}>
+        <Box>
+          <ImageGeneratorInput />
+        </Box>
+      </Box>
+    </Container>
+  )
 }
 
 export default Dashboard

@@ -3,7 +3,7 @@ import { Suspense } from "react"
 import "./global.css"
 import loginBg from "@img/login/bg.png"
 import { headers } from "next/headers"
-import { Loading } from "@components/Loading/index"
+import { Loading } from "@/components/Loading/index"
 import type { Viewport, Metadata } from "next"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
