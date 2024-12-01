@@ -66,10 +66,12 @@ export default function ImageGeneratorInput() {
     setError(null)
 
     try {
-      const [err, response] = await generateImage({
+      const params = {
         prompt: inputData.prompt,
         ...generationOptions
-      })
+      }
+
+      const [err, response] = await generateImage(params)
 
       if (err) {
         setError(err.message || "生成失败，请重试")
