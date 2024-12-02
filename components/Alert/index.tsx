@@ -4,7 +4,7 @@ import { keyframes } from "@emotion/react"
 import { createRoot } from "react-dom/client"
 import { Show } from "@chakra-ui/react"
 import { v4 as uuidv4 } from "uuid"
-import warnIcon from "@/img/AlterWarningIcon.svg"
+import warnIcon from "@img/AlterWarningIcon.svg"
 
 import "./index.css"
 
