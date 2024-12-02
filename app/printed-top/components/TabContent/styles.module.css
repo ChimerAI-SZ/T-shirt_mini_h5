@@ -1,0 +1,67 @@
+.tabContent {
+  padding: 20px;
+  height: calc(100% - 48px);
+  overflow: hidden;
+}
+
+.optionsScroll {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.optionCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.optionCard:hover {
+  border-color: #666;
+}
+
+.selected {
+  border-color: #1a1a1a;
+  background-color: rgba(26, 26, 26, 0.05);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.optionImage {
+  object-fit: contain;
+}
+
+.optionName {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.comingSoon {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.comingSoonBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 2px 6px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+}
