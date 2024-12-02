@@ -1,0 +1,40 @@
+/* 自定义调整大小的手柄样式 */
+.react-resizable-handle {
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border: 1.5px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+}
+
+.react-resizable-handle-sw {
+    bottom: -5px;
+    left: -5px;
+}
+
+.react-resizable-handle-se {
+    bottom: -5px;
+    right: -5px;
+}
+
+.react-resizable-handle-nw {
+    top: -5px;
+    left: -5px;
+}
+
+.react-resizable-handle-ne {
+    top: -5px;
+    right: -5px;
+}
+
+.react-resizable-handle-w,
+.react-resizable-handle-e {
+    top: 50%;
+    margin-top: -5px;
+}
+
+.react-resizable-handle-n,
+.react-resizable-handle-s {
+    left: 50%;
+    margin-left: -5px;
+}
