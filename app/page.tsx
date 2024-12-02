@@ -3,10 +3,14 @@
 import { useState } from "react"
 import styled from "@emotion/styled"
 import { useRouter } from "next/navigation"
+import { useSetState } from "ahooks"
+
+import { generateImage } from "@/lib/request/page"
+import { errorCaptureRes } from "@/utils/index"
 
 import { Flex, Show, Image, Textarea, Box, Text, For, Grid } from "@chakra-ui/react"
 import { Button } from "@/components/ui/button"
-import ImageGeneratorInput from "@/components/ImageGeneratorInput"
+import { Alert } from "@/components/Alert"
 
 const aspectRadioList = [
   { label: "3:1", value: "ASPECT_3_1", type: "horizontal" },
@@ -46,10 +50,25 @@ const orientationOptionList = [
   }
 ]
 
+interface generationOptionsType {
+  prompt: string
+  aspect_ratio?:
+    | "ASPECT_1_1"
+    | "ASPECT_16_10"
+    | "ASPECT_10_16"
+    | "ASPECT_4_3"
+    | "ASPECT_3_4"
+    | "ASPECT_16_9"
+    | "ASPECT_9_16"
+    | "ASPECT_3_2"
+    | "ASPECT_2_3"
+  model?: "V_1" | "V_1_TURBO" | "V_2" | "V_2_TURBO"
+  style_type?: "AUTO" | "GENERAL" | "REALISTIC" | "DESIGN" | "RENDER_3D" | "ANIME"
+  magic_prompt_option?: "AUTO" | "ON" | "OFF"
+}
+
 function Dashboard() {
   const [referenceType, setReferenceType] = useState<"picture" | "tips">("tips") // 参考类型，默认提示语，还能选择参考图
-
-  const [desc, setDesc] = useState("") // 提示语
 
   // 比例
   const [orientation, setOrientation] = useState("horizontal")
@@ -58,9 +77,39 @@ function Dashboard() {
   const [loading, setLoading] = useState(false) // 加载状态
   const [loadingTime, setLoadingTime] = useState(0) // 加载已用时间
 
+  const [generationOptions, setGenerationOptions] = useSetState<generationOptionsType>({
+    // 固定配置
+    model: "V_2_TURBO",
+    style_type: "AUTO",
+    magic_prompt_option: "AUTO",
+    // 必填配置
+    aspect_ratio: "ASPECT_4_3",
+
+    prompt: ""
+  })
+
   const router = useRouter()
 
-  const handleGenerate = () => {
+  const handleOrientataionSelect = (value: string) => {
+    // 存入 state
+    setOrientation(value)
+
+    // 切换图片类型之后，同步修改默认比例
+    switch (value) {
+      case "horizontal":
+        setAspectRadio("ASPECT_4_3")
+        break
+      case "vertical":
+        setAspectRadio("ASPECT_3_4")
+        break
+      default:
+        setAspectRadio("ASPECT_1_1")
+        break
+    }
+  }
+
+  // 生成图片
+  const handleGenerate = async () => {
     setLoading(true)
 
     let time = 0
@@ -69,16 +118,22 @@ function Dashboard() {
       setLoadingTime(time)
     }, 1000)
 
+    const [err, res] = await generateImage(generationOptions)
+
+    if (err || (res && !res?.success)) {
+      Alert.open({
+        content: err.message ?? res.message
+      })
+    } else if (res?.success && res?.data?.length > 0) {
+      // router.push("/imagePreselection")
+    }
+
     setTimeout(() => {
-      clearInterval(interval)
-      setLoading(false)
+      setLoadingTime(0)
+    }, 1000)
 
-      router.push("/imagePreselection")
-
-      setTimeout(() => {
-        setLoadingTime(0)
-      }, 1000)
-    }, 5000)
+    clearInterval(interval)
+    setLoading(false)
   }
 
   return (
@@ -87,13 +142,33 @@ function Dashboard() {
         <Flex flexDirection="column" w={"100%"}>
           {/* 选择设计类型 */}
           <DesignType>
-            <Flex w={"50%"} h={"3.75rem"} bgColor={"#FFECEE"}>
-              <Image src={"/assets/images/parameterConfig/brush.svg"} />
+            <Flex w={"50%"} h={"3.75rem"} bgColor={"#FFECEE"} position={"relative"}>
+              <Image src={"/assets/images/parameterConfig/brush.svg"} alt="" />
               <span>插画设计</span>
+              <Image
+                alt=""
+                src={"/assets/images/parameterConfig/brush_bg.svg"}
+                boxSize={"2.5rem"}
+                position={"absolute"}
+                zIndex={1}
+                right={0}
+                bottom={0}
+                margin={0}
+              />
             </Flex>
-            <Flex w={"50%"} h={"3.75rem"} bgColor={"#F3F3F3"}>
+            <Flex w={"50%"} h={"3.75rem"} bgColor={"#F3F3F3"} position={"relative"}>
               <Image src={"/assets/images/parameterConfig/artboard.svg"} />
               <span>Logo插画设计</span>
+              <Image
+                alt=""
+                src={"/assets/images/parameterConfig/artboard_bg.svg"}
+                boxSize={"2.5rem"}
+                position={"absolute"}
+                zIndex={1}
+                right={0}
+                bottom={0}
+                margin={0}
+              />
             </Flex>
           </DesignType>
           {/* 选择参考类型 */}
@@ -124,9 +199,11 @@ function Dashboard() {
               <Box h={"15rem"} position={"relative"}>
                 <StyledTextarea
                   onChange={e => {
-                    setDesc(e.target.value)
+                    setGenerationOptions({
+                      prompt: e.target.value
+                    })
                   }}
-                  value={desc}
+                  value={generationOptions.prompt}
                   bgColor={"#f5f5f5"}
                   borderRadius={"0.5rem"}
                   border={"unset"}
@@ -153,16 +230,16 @@ function Dashboard() {
                 {item => {
                   const checked = orientation === item.value
                   return (
-                    <OrientatioItem
+                    <OrientationItem
                       checked={checked}
                       onClick={() => {
-                        setOrientation(item.value)
+                        handleOrientataionSelect(item.value)
                       }}
                       key={item.value}
                     >
                       <Image src={checked ? item.selectedImgUrl : item.imgUrl} />
                       <div>{item.label}</div>
-                    </OrientatioItem>
+                    </OrientationItem>
                   )
                 }}
               </For>
@@ -186,11 +263,11 @@ function Dashboard() {
         </Flex>
         <Footer>
           <Button
-            w={"20.38rem"}
+            disabled={referenceType === "tips" && !generationOptions.prompt}
+            w={"16.69rem"}
             bgColor={"#ee3939"}
-            borderRadius={"40px"}
+            borderRadius={"1.25rem"}
             type="submit"
-            mx="1.53rem"
             loading={loading}
             loadingText={
               <div>
@@ -301,7 +378,7 @@ const DesignType = styled(Section)`
       }
     }
 
-    & > img {
+    & > img:first-child {
       width: 1rem;
       height: 1rem;
       margin-right: 0.38rem;
@@ -357,12 +434,13 @@ const SubTitle = styled.div`
   text-align: left;
   font-style: normal;
 `
-interface OrientatioItemType {
+interface OrientationItemType {
   checked: boolean
 }
-const OrientatioItem = styled.div<OrientatioItemType>`
+const OrientationItem = styled.div<OrientationItemType>`
   background: ${props => (props.checked ? "#FFECEE" : "#F5F5F5")};
   color: ${props => (props.checked ? "#EE2233" : "#171717")};
+  border-radius: 0.5rem;
 
   display: flex;
   flex-direction: column;
@@ -381,7 +459,7 @@ const OrientatioItem = styled.div<OrientatioItemType>`
     width: 0.88rem;
   }
 `
-const RadioItem = styled.div<OrientatioItemType>`
+const RadioItem = styled.div<OrientationItemType>`
   height: 2.25rem;
   border-radius: 0.5rem;
   background: ${props => (props.checked ? "#FFECEE" : "#F5F5F5")};
