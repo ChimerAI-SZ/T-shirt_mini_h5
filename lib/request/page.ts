@@ -1,4 +1,5 @@
-import { apiInstance, externalInstance } from "../axios"
+import { instance, apiInstance } from "../axios"
+
 import { errorCaptureRes } from "@/utils/index"
 
 // 分辨率枚举
@@ -140,34 +141,11 @@ export interface IdeogramImageResponse {
   }>
 }
 
-// 现有的接口使用 apiInstance
-export const fetchHomePage = async (params: object) => {
-  return errorCaptureRes(async () => {
-    const response = await apiInstance.post("/api/image/list", params)
-    return response
-  })
-}
-
-export const fetchCollectionList = async (params: { user_id: string }) => {
-  return errorCaptureRes(async () => {
-    const response = await apiInstance.post("/api/image/list", params)
-    return response
-  })
-}
-
 // Ideogram API 接口使用 apiInstance
 export const generateImage = async (imageRequest: IdeogramImageRequest) => {
   return errorCaptureRes(async () => {
     try {
-      const response = await apiInstance.post<IdeogramImageResponse>(
-        "api/generate",
-        { image_request: imageRequest },
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      )
+      const response = await instance.post("/api/ideogram/generate", imageRequest)
       return response
     } catch (error: any) {
       // 提取详细错误信息

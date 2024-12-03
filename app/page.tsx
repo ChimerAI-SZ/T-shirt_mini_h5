@@ -50,18 +50,19 @@ const orientationOptionList = [
   }
 ]
 
+type aspectRatioType =
+  | "ASPECT_1_1"
+  | "ASPECT_16_10"
+  | "ASPECT_10_16"
+  | "ASPECT_4_3"
+  | "ASPECT_3_4"
+  | "ASPECT_16_9"
+  | "ASPECT_9_16"
+  | "ASPECT_3_2"
+  | "ASPECT_2_3"
 interface generationOptionsType {
   prompt: string
-  aspect_ratio?:
-    | "ASPECT_1_1"
-    | "ASPECT_16_10"
-    | "ASPECT_10_16"
-    | "ASPECT_4_3"
-    | "ASPECT_3_4"
-    | "ASPECT_16_9"
-    | "ASPECT_9_16"
-    | "ASPECT_3_2"
-    | "ASPECT_2_3"
+  aspect_ratio?: aspectRatioType
   model?: "V_1" | "V_1_TURBO" | "V_2" | "V_2_TURBO"
   style_type?: "AUTO" | "GENERAL" | "REALISTIC" | "DESIGN" | "RENDER_3D" | "ANIME"
   magic_prompt_option?: "AUTO" | "ON" | "OFF"
@@ -95,17 +96,22 @@ function Dashboard() {
     setOrientation(value)
 
     // 切换图片类型之后，同步修改默认比例
+    let aspect_ratio: aspectRatioType = "ASPECT_4_3"
     switch (value) {
       case "horizontal":
-        setAspectRadio("ASPECT_4_3")
+        aspect_ratio = "ASPECT_4_3"
         break
       case "vertical":
-        setAspectRadio("ASPECT_3_4")
+        aspect_ratio = "ASPECT_3_4"
         break
       default:
-        setAspectRadio("ASPECT_1_1")
+        aspect_ratio = "ASPECT_1_1"
         break
     }
+
+    setGenerationOptions({
+      aspect_ratio
+    })
   }
 
   // 生成图片
@@ -118,15 +124,25 @@ function Dashboard() {
       setLoadingTime(time)
     }, 1000)
 
-    const [err, res] = await generateImage(generationOptions)
+    // 异步函数，用于生成一张图片并返回结果
 
-    if (err || (res && !res?.success)) {
-      Alert.open({
-        content: err.message ?? res.message
-      })
-    } else if (res?.success && res?.data?.length > 0) {
-      // router.push("/imagePreselection")
+    const result = []
+
+    // 异步调用4次接口（同步会报错只有最后一个接口会被调用）
+    for (let index = 0; index < 4; index++) {
+      const [err, res] = await generateImage(generationOptions)
+
+      result.push(res)
     }
+
+    const timestamp = Date.now()
+    const imgUrls = JSON.stringify(result.map(item => item.data.data[0].url))
+
+    localStorage.setItem(`generatedImgList_${timestamp}`, imgUrls)
+
+    // todo 这里是否针对某个错误进行判断，如果有错误的话再调用接口直到有4张图片呢？
+
+    router.push(`/imagePreselection?timestamp=${timestamp}`)
 
     setTimeout(() => {
       setLoadingTime(0)
@@ -139,7 +155,7 @@ function Dashboard() {
   return (
     <Container className="parameter-config-container">
       <Wrapper>
-        <Flex flexDirection="column" w={"100%"}>
+        <Flex flexDirection="column" w={"100%"} mb={"3.8rem"}>
           {/* 选择设计类型 */}
           <DesignType>
             <Flex w={"50%"} h={"3.75rem"} bgColor={"#FFECEE"} position={"relative"}>
@@ -249,9 +265,12 @@ function Dashboard() {
                 {item => (
                   <RadioItem
                     onClick={() => {
+                      setGenerationOptions({
+                        aspect_ratio: item.value as aspectRatioType
+                      })
                       setAspectRadio(item.value)
                     }}
-                    checked={aspectRadio === item.value}
+                    checked={generationOptions.aspect_ratio === item.value}
                     key={item.value}
                   >
                     <span>{item.label}</span>

@@ -1,23 +1,35 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "@emotion/styled"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import { Flex, Image, Box, For } from "@chakra-ui/react"
 import { Button } from "@/components/ui/button"
 
-const imgUrlList = [
-  "https://ideogram.ai/api/images/ephemeral/uNPI0hifTz-vJ9Qj4qPSCQ.png?exp=1733155749&sig=65c06b2d225478ecdfeedbbeb55475eac43d389f98c49302a1fcfa3ab7944b4e",
-  "https://ideogram.ai/api/images/ephemeral/6lZhV6XZSEWmXw7JiTX99w.png?exp=1733155992&sig=1b0a3a53611132847442736cc858237e11deed4c7a6dbbeb74cee8ba3226db2a",
-  "https://ideogram.ai/api/images/ephemeral/pIWCOWLUTUafaR1Eph5xzA.png?exp=1733156064&sig=e87d0f0c3f1d8fd5953ba7f60219ded0fae4779528ca78bbbf5efe38b4a7a5a3",
-  "https://ideogram.ai/api/images/ephemeral/Yah_9H5QSgaFAcBVC16FqA.png?exp=1733156183&sig=3f0321af83d3a397ae30aaa06f8593fdc539d8e74b733f8d25de5491e7d6111b"
-]
-
 const ImagePreselection = () => {
   const [selectedImgIndex, setSelectedImgIndex] = useState(0)
+  const [imgUrlList, setImgUrlList] = useState<string[]>([])
 
+  const searchParams = useSearchParams()
   const router = useRouter()
+
+  // 上身展示
+  const handleConfirm = () => {
+    const timestamp = Date.now()
+    const url = imgUrlList[selectedImgIndex]
+
+    localStorage.setItem(`selectedImg_${timestamp}`, url)
+
+    router.push(`/clothPreview?timestamp=${timestamp}`)
+  }
+
+  useEffect(() => {
+    const timestamp = searchParams.get("timestamp")
+    const urlList = JSON.parse(localStorage.getItem(`generatedImgList_${timestamp}`) ?? "[]")
+
+    setImgUrlList(urlList)
+  }, [])
 
   return (
     <Container>
@@ -53,7 +65,10 @@ const ImagePreselection = () => {
               color={"#171717"}
               fontWeight={"400"}
               fontSize={"0.94rem"}
-              onClick={() => {}}
+              mr={"0.75rem"}
+              onClick={() => {
+                router.back()
+              }}
             >
               重新生成
             </Button>
@@ -65,9 +80,7 @@ const ImagePreselection = () => {
               color={"#fff"}
               fontWeight={"400"}
               fontSize={"0.94rem"}
-              onClick={() => {
-                router.push("/clothPreview")
-              }}
+              onClick={handleConfirm}
             >
               上身展示
             </Button>

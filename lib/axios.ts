@@ -46,6 +46,11 @@ export const externalInstance = axios.create({
   timeout: 30000
 })
 
+export const instance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL || "/",
+  timeout: 30000
+})
+
 // 用于存储 pending 的请求（处理多条相同请求）
 const pendingRequest = new Map<string, CancelTokenSource>()
 
@@ -76,7 +81,7 @@ const removePendingRequest = (config: AxiosRequestConfig): void => {
 }
 
 // 为两个实例添加拦截器
-;[apiInstance, externalInstance].forEach(instance => {
+;[instance, apiInstance, externalInstance].forEach(instance => {
   instance.interceptors.request.use(
     config => {
       const extendedConfig = config as ExtendedAxiosRequestConfig
