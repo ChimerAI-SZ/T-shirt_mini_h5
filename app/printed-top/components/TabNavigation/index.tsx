@@ -16,7 +16,7 @@ export function TabNavigation({ tabs, activeTab, onTabChange }: TabNavigationPro
           className={`${styles.tabButton} ${activeTab === tab.id ? styles.activeTab : ""}`}
           onClick={() => onTabChange(tab.id)}
         >
-          {tab.label}
+          <span className={styles.tabLabel}>{tab.label}</span>
         </button>
       ))}
     </div>

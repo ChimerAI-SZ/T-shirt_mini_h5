@@ -17,6 +17,10 @@ module.exports = {
       {
         protocol: "https",
         hostname: "**.aliyuncs.com"
+      },
+      {
+        protocol: "https",
+        hostname: "brain-testing.oss-cn-beijing.aliyuncs.com",
       }
     ]
   },

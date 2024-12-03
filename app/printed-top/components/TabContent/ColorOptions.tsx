@@ -1,4 +1,3 @@
-import Image from "next/image"
 import { ColorOption } from "../../types"
 import { colorOptions } from "../../constants"
 import styles from "./styles.module.css"
@@ -17,14 +16,12 @@ export function ColorOptions({ selectedColor, onColorSelect }: ColorOptionsProps
           className={`${styles.optionCard} ${selectedColor?.id === color.id ? styles.selected : ""}`}
           onClick={() => onColorSelect(color)}
         >
-          <Image
-            src={`/images/styles/tshirt-${color.id}.png`}
-            alt={color.name}
-            width={120}
-            height={120}
-            className={styles.optionImage}
-          />
-          <span className={styles.optionName}>{color.name}</span>
+          <div className={styles.imageWrapper}>
+            <img src={color.image} alt={color.name} className={styles.optionImage} />
+          </div>
+          <span className={`${styles.optionName} ${selectedColor?.id === color.id ? styles.selectedText : ""}`}>
+            {color.name}
+          </span>
         </div>
       ))}
     </div>

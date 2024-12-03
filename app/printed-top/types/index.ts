@@ -1,6 +1,7 @@
 export interface TabOption {
   id: string
   label: string
+  image: string
 }
 
 export interface ModelOption {
@@ -20,6 +21,7 @@ export interface ColorOption {
   id: string
   name: string
   hex: string
+  image: string
 }
 
 export interface PrintPosition {
@@ -28,4 +30,9 @@ export interface PrintPosition {
   width: number
   height: number
   scale: number
+}
+
+export interface PreviewAreaProps {
+  selectedStyle: StyleOption | null
+  selectedColor: ColorOption | null
 }

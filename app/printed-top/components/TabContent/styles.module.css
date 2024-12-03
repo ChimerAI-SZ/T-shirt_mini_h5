@@ -1,16 +1,12 @@
 .tabContent {
-  padding: 20px;
   height: calc(100% - 48px);
   overflow: hidden;
 }
 
 .optionsScroll {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 16px;
-  padding: 16px;
-  overflow-y: auto;
-  height: 100%;
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
 }
 
 .optionCard {
@@ -20,34 +16,41 @@
   align-items: center;
   padding: 8px;
   border-radius: 8px;
-  border: 1px solid #eee;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.optionCard:hover {
-  border-color: #666;
+.selected {
+  position: relative;
+  background-color: transparent;
 }
 
-.selected {
-  border-color: #1a1a1a;
-  background-color: rgba(26, 26, 26, 0.05);
+.selected::after {
+  display: none;
 }
 
 .imageWrapper {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 3.78rem;
+  height: 3.78rem;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.2s;
 }
 
 .optionImage {
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .optionName {
   margin-top: 8px;
   font-size: 14px;
   color: #333;
+  transition: all 0.2s;
 }
 
 .comingSoon {
@@ -64,4 +67,14 @@
   color: white;
   border-radius: 4px;
   font-size: 12px;
+}
+
+/* 选中状态样式 */
+.selected .imageWrapper {
+  border-color: #ff4d4f;
+}
+
+.selectedText {
+  color: #ff4d4f;
+  font-weight: 600;
 }
