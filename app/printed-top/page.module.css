@@ -12,18 +12,7 @@
   flex-direction: column;
   gap: 0px;
   border-radius: 12px;
-}
-
-@media (max-width: 768px) {
-  .container {
-    gap: 0px;
-    padding: 0 16px;
-  }
-
-  .tabsContainer {
-    gap: 0px;
-    padding: 0 12px;
-  }
+  background: #ffffff;
 }
 
 .bottomButton {
@@ -43,10 +32,10 @@
 
 .previewButton {
   width: 100%;
-  max-width: 343px;
-  height: 44px;
-  background: #ee2233;
-  border-radius: 22px;
+  max-width: 16.69rem;
+  height: 2.5rem;
+  background: #ee3939;
+  border-radius: 1.25rem;
   border: none;
   color: #ffffff;
   font-size: 0.94rem;
@@ -65,6 +54,6 @@
 
 @media (max-width: 768px) {
   .container {
-    padding: 0 16px 80px;
+    padding: 0 0px 80px;
   }
 }

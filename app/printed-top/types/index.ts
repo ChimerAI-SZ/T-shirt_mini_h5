@@ -7,7 +7,7 @@ export interface TabOption {
 export interface ModelOption {
   id: string
   image: string
-  gender: "男生" | "女生"
+  gender: "男性" | "女性"
 }
 
 export interface StyleOption {

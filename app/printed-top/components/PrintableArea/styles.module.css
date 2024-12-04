@@ -47,6 +47,19 @@
   pointer-events: none;
 }
 
+/* 添加白色背景层 */
+.editableArea::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.3); /* 10% 透明度的白色背景 */
+  border-radius: 6px; /* 略小于外层边框的圆角 */
+  z-index: -1;
+}
+
 .canvasContainer {
   position: absolute;
   left: 0;

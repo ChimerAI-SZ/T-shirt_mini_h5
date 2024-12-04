@@ -1,9 +1,13 @@
 .tabList {
   display: flex;
   gap: 1.88rem;
-  padding: 0.41rem;
+  padding: 0.41rem 1.13rem;
   border-radius: 8px;
   justify-content: flex-start;
+  background: #ffffff;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  overflow: hidden;
+  border-bottom: 1px solid #f5f5f7;
 }
 
 .tabButton {

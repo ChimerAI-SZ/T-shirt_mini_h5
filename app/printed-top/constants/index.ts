@@ -78,15 +78,19 @@ export const colorOptions: ColorOption[] = [
 ]
 
 export const modelOptions: ModelOption[] = [
-  { id: "male1", image: "/images/boy.svg", gender: "男生" },
-  { id: "female1", image: "/images/girl.svg", gender: "女生" }
+  { id: "male1", image: "/images/boy.svg", gender: "男性" },
+  { id: "female1", image: "/images/girl.svg", gender: "女性" }
 ]
-export const image = [
+
+export const femaleImages = [
   "https://brain-testing.oss-cn-beijing.aliyuncs.com/Chimer_00001436.png",
   "https://brain-testing.oss-cn-beijing.aliyuncs.com/Chimer_00001437.png",
   "https://brain-testing.oss-cn-beijing.aliyuncs.com/Chimer_00001452.png",
   "https://brain-testing.oss-cn-beijing.aliyuncs.com/ComfyUI_00055_.png",
-  "https://brain-testing.oss-cn-beijing.aliyuncs.com/ComfyUI_00059_.png",
+  "https://brain-testing.oss-cn-beijing.aliyuncs.com/ComfyUI_00059_.png"
+]
+
+export const maleImages = [
   "https://brain-testing.oss-cn-beijing.aliyuncs.com/ComfyUI_00063_.png",
   "https://brain-testing.oss-cn-beijing.aliyuncs.com/ComfyUI_00070_.png",
   "https://brain-testing.oss-cn-beijing.aliyuncs.com/ComfyUI_00073_.png",
