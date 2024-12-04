@@ -14,10 +14,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
   // 预加载关键路由
   useEffect(() => {
     // 预加载常用路由
-    router.prefetch("/login")
-    router.prefetch("/album")
-    router.prefetch("/profile")
-    router.prefetch("/upload")
   }, [router])
 
   return (
