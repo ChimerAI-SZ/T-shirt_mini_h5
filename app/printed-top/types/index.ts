@@ -27,9 +27,8 @@ export interface ColorOption {
 export interface PrintPosition {
   x: number
   y: number
-  width: number
-  height: number
-  scale: number
+  scale?: number
+  rotation: number
 }
 
 export interface PreviewAreaProps {

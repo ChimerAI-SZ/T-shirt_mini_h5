@@ -31,12 +31,13 @@
 
 .imageWrapper {
   position: relative;
-  width: 3.78rem;
-  height: 3.78rem;
-  border-radius: 4px;
-  overflow: hidden;
-  border: 2px solid transparent;
+  width: 4.91rem;
+  height: 4.91rem;
+  background: #ffffff;
+  border-radius: 0.5rem;
+  border: 0.03rem solid #e3e3e3;
   transition: all 0.2s;
+  overflow: hidden;
 }
 
 .optionImage {
@@ -63,10 +64,15 @@
   top: 8px;
   right: 8px;
   padding: 2px 6px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  border-radius: 4px;
-  font-size: 12px;
+  font-family:
+    PingFangSC,
+    PingFang SC;
+  font-weight: 400;
+  font-size: 0.69rem;
+  color: #a6a6a6;
+  border-radius: 0rem 0.5rem 0rem 0.5rem;
+  background: #eeeeee;
+  z-index: 1;
 }
 
 /* 选中状态样式 */

@@ -17,7 +17,9 @@ export function ModelOptions({ selectedModel, onModelSelect }: ModelOptionsProps
           className={`${styles.optionCard} ${selectedModel?.id === model.id ? styles.selected : ""}`}
           onClick={() => onModelSelect(model)}
         >
-          <Image src={model.image} alt={model.gender} width={120} height={120} className={styles.optionImage} />
+          <div className={styles.imageWrapper}>
+            <img src={model.image} alt={model.gender} className={styles.optionImage} />
+          </div>
           <span className={styles.optionName}>{model.gender}</span>
         </div>
       ))}

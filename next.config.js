@@ -8,19 +8,20 @@ module.exports = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "creamoda.oss-us-west-1.aliyuncs.com"
+        hostname: "ch-testing.oss-cn-beijing.aliyuncs.com"
       },
       {
         protocol: "https",
-        hostname: "www.creamoda.ai"
-      },
+        hostname: "brain-testing.oss-cn-beijing.aliyuncs.com"
+      }
+    ],
+    unoptimized: true
+  },
+  async rewrites() {
+    return [
       {
-        protocol: "https",
-        hostname: "**.aliyuncs.com"
-      },
-      {
-        protocol: "https",
-        hostname: "brain-testing.oss-cn-beijing.aliyuncs.com",
+        source: '/api/proxy-image',
+        destination: 'https://brain-testing.oss-cn-beijing.aliyuncs.com/:path*'
       }
     ]
   },

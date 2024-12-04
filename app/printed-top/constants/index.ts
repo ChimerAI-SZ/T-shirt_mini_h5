@@ -7,9 +7,9 @@ export const tabs: TabOption[] = [
 ]
 
 export const styleOptions: StyleOption[] = [
-  { id: "tshirt", name: "圆领T恤", image: "/images/tshirt-template.png", status: "active" },
-  { id: "hoodie", name: "连帽卫衣", image: "/images/hoodie-template.png", status: "coming" },
-  { id: "polo", name: "POLO衫", image: "/images/polo-template.png", status: "coming" }
+  { id: "tshirt", name: "圆领T恤", image: "/images/round-collar.png", status: "active" },
+  { id: "hoodie", name: "连帽卫衣", image: "/images/hoodie.png", status: "coming" },
+  { id: "polo", name: "POLO衫", image: "/images/polo.png", status: "coming" }
 ]
 
 export const colorOptions: ColorOption[] = [
@@ -78,8 +78,8 @@ export const colorOptions: ColorOption[] = [
 ]
 
 export const modelOptions: ModelOption[] = [
-  { id: "male1", image: "/images/models/male1.png", gender: "男生" },
-  { id: "female1", image: "/images/models/female1.png", gender: "女生" }
+  { id: "male1", image: "/images/boy.svg", gender: "男生" },
+  { id: "female1", image: "/images/girl.svg", gender: "女生" }
 ]
 export const image = [
   "https://brain-testing.oss-cn-beijing.aliyuncs.com/Chimer_00001436.png",
