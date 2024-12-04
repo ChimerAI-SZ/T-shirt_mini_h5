@@ -35,15 +35,16 @@ const ImagePreselection = () => {
     <Container>
       <Wrapper>
         <Flex flexDirection="column" w={"100%"}>
-          <Box>
+          <Flex flexGrow={"1"} alignItems={"center"} justifyContent={"center"}>
             <Image src={imgUrlList[selectedImgIndex]} alt="" />
-          </Box>
+          </Flex>
           <ImgSelctor>
             <For each={imgUrlList}>
               {(url: string, index: number) => {
                 return (
                   <Image
-                    w={selectedImgIndex === index ? "2.5rem" : "2rem"}
+                    key={url}
+                    w={selectedImgIndex === index ? "3rem" : "2.5rem"}
                     border={selectedImgIndex === index ? "0.09rem solid #EE3939" : "unset"}
                     borderRadius={"0.25rem"}
                     onClick={() => {
@@ -124,7 +125,10 @@ const ImgSelctor = styled.div`
   align-items: center;
   justify-content: center;
 
+  height: 6rem;
+
   margin-top: 2rem;
+  margin-bottom: 4.5rem;
 
   & > img {
     margin-right: 0.5rem;

@@ -444,7 +444,7 @@ const SwitchBg = styled.div<SwitchBgType>`
 `
 const RatioSelector = styled(Section)`
   flex-direction: column;
-  margin-bottom: 3.8rem;
+  margin-bottom: 4.5rem;
 `
 const SubTitle = styled.div`
   font-weight: 600;
