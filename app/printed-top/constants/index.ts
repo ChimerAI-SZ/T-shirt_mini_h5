@@ -15,7 +15,7 @@ export const styleOptions: StyleOption[] = [
 export const colorOptions: ColorOption[] = [
   {
     id: "anyehui",
-    name: "暗夜灰",
+    name: "木炭灰",
     hex: "#666666",
     image: "https://brain-testing.oss-cn-beijing.aliyuncs.com/img/s_anyehui.jpg"
   },
@@ -29,13 +29,13 @@ export const colorOptions: ColorOption[] = [
   },
   {
     id: "kaqi",
-    name: "卡其",
+    name: "浅粉",
     hex: "#808000",
     image: "https://brain-testing.oss-cn-beijing.aliyuncs.com/img/s_kaqi.jpg"
   },
   {
     id: "kelaiyinlan",
-    name: "卡莱茵蓝",
+    name: "宝蓝",
     hex: "#0000FF",
     image: "https://brain-testing.oss-cn-beijing.aliyuncs.com/img/s_kelaiyinlan.jpg"
   },
@@ -47,19 +47,19 @@ export const colorOptions: ColorOption[] = [
   },
   {
     id: "muguacheng",
-    name: "木瓜橙",
+    name: "橙色",
     hex: "#FFA500",
     image: "https://brain-testing.oss-cn-beijing.aliyuncs.com/img/s_muguacheng.jpg"
   },
   {
     id: "qianfen",
-    name: "浅粉",
+    name: "豆沙粉",
     hex: "#FFC0CB",
     image: "https://brain-testing.oss-cn-beijing.aliyuncs.com/img/s_qianfen.jpg"
   },
   {
     id: "wumailan",
-    name: "乌麦兰",
+    name: "天蓝",
     hex: "#808080",
     image: "https://brain-testing.oss-cn-beijing.aliyuncs.com/img/s_wumailan.jpg"
   },
@@ -71,7 +71,7 @@ export const colorOptions: ColorOption[] = [
   },
   {
     id: "zhongguohong",
-    name: "中国红",
+    name: "红色",
     hex: "#FF0000",
     image: "https://brain-testing.oss-cn-beijing.aliyuncs.com/img/s_zhongguohong.jpg"
   }

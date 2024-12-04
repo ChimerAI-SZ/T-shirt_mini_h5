@@ -240,7 +240,6 @@ export function PrintableArea({ previewImage, defaultPrint, onPositionChange, in
               scale: img.scaleX || 1,
               rotation: img.angle || 0
             }
-            console.log("Modified position:", newPosition)
             onPositionChange?.(newPosition)
           })
 
