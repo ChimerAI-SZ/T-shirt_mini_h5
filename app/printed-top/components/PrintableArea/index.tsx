@@ -234,23 +234,32 @@ export function PrintableArea({ previewImage, defaultPrint, onPositionChange, in
 
           img.on("modified", () => {
             if (!img.left || !img.top) return
+
             const newPosition = {
-              x: img.left,
-              y: img.top,
-              scale: img.scaleX || 1,
+              x: Math.round(img.left * 2.133),
+              y: Math.round(img.top * 2.133),
+              scale: Number(((img.scaleX || 1) * 2.133).toFixed(4)),
               rotation: img.angle || 0
             }
+
             onPositionChange?.(newPosition)
           })
 
           canvas.add(img)
           canvas.setActiveObject(img)
           canvas.renderAll()
+
+          // 重命名为 currentPosition 避免冲突
+          const currentPosition = {
+            x: Math.round(img.left! * 2.133),
+            y: Math.round(img.top! * 2.133),
+            scale: Number(((img.scaleX || 1) * 2.133).toFixed(4)),
+            rotation: img.angle || 0
+          }
+
+          onPositionChange?.(currentPosition)
         },
-        {
-          crossOrigin: "anonymous"
-          // 添加其他需要的选项
-        } as fabric.IImageOptions
+        { crossOrigin: "anonymous" } as fabric.IImageOptions
       )
 
       const handleResize = () => {
