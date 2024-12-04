@@ -1,14 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import styled from "@emotion/styled"
 import { useRouter } from "next/navigation"
 import { useSetState } from "ahooks"
 
-import { generateImage } from "@/lib/request/page"
-import { errorCaptureRes } from "@/utils/index"
+import { generateImage, generateImageByRemix } from "@/lib/request/page"
 
-import { Flex, Show, Image, Textarea, Box, Text, For, Grid } from "@chakra-ui/react"
+import { Flex, Show, Image as ChakraImage, Textarea, Box, Text, For, Grid } from "@chakra-ui/react"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/Alert"
 
@@ -66,6 +65,7 @@ interface generationOptionsType {
   model?: "V_1" | "V_1_TURBO" | "V_2" | "V_2_TURBO"
   style_type?: "AUTO" | "GENERAL" | "REALISTIC" | "DESIGN" | "RENDER_3D" | "ANIME"
   magic_prompt_option?: "AUTO" | "ON" | "OFF"
+  image_file: File | null
 }
 
 function Dashboard() {
@@ -73,10 +73,12 @@ function Dashboard() {
 
   // 比例
   const [orientation, setOrientation] = useState("horizontal")
-  const [aspectRadio, setAspectRadio] = useState("ASPECT_4_3")
 
   const [loading, setLoading] = useState(false) // 加载状态
   const [loadingTime, setLoadingTime] = useState(0) // 加载已用时间
+
+  const [uploadedImgSrc, setUploadedImgSrc] = useState<string | null>(null) // 上传的图片的src
+  const [uploadedImgType, setUploadedImgType] = useState<"horizontal" | "vertical">("horizontal") // 上传的图片类型（横向还是竖向）
 
   const [generationOptions, setGenerationOptions] = useSetState<generationOptionsType>({
     // 固定配置
@@ -86,11 +88,61 @@ function Dashboard() {
     // 必填配置
     aspect_ratio: "ASPECT_4_3",
 
-    prompt: ""
+    prompt: "",
+    image_file: null
   })
 
   const router = useRouter()
 
+  // 点击上传图片事件
+  const handleUploadImg = () => {
+    const fileInput = document.createElement("input")
+    fileInput.type = "file"
+    fileInput.accept = "image/*"
+    fileInput.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement
+      const file = target.files?.[0]
+      if (file) {
+        console.log(file)
+        setGenerationOptions({
+          image_file: file
+        })
+
+        const reader = new FileReader()
+        reader.onload = e => {
+          if (typeof e.target?.result === "string") {
+            setUploadedImgSrc(e.target.result)
+            loadImageDimensions(e.target.result)
+          }
+        }
+        reader.readAsDataURL(file)
+        // 这里可以添加代码来显示图片预览或者上传到服务器
+      }
+    }
+    fileInput.click()
+  }
+
+  const loadImageDimensions = (src: string) => {
+    const img = new Image()
+    img.src = src
+    img.onload = () => {
+      const width = img.width
+      const height = img.height
+      console.log(width, height)
+      if (width > height) {
+        setUploadedImgType("horizontal") // 横向图片
+      } else if (height > width) {
+        setUploadedImgType("vertical") // 竖向图片
+      } else {
+        setUploadedImgType("horizontal") // 正方形图片
+      }
+    }
+    img.onerror = (error: any) => {
+      console.error("Error loading image dimensions:", error)
+    }
+  }
+
+  // 选择图片的比例方向（横向、竖向、正方形）
   const handleOrientataionSelect = (value: string) => {
     // 存入 state
     setOrientation(value)
@@ -128,21 +180,50 @@ function Dashboard() {
 
     const result = []
 
-    // 异步调用4次接口（同步会报错只有最后一个接口会被调用）
-    for (let index = 0; index < 4; index++) {
-      const [err, res] = await generateImage(generationOptions)
+    if (referenceType === "tips") {
+      // 异步调用4次接口（同步会报错只有最后一个接口会被调用）
+      for (let index = 0; index < 4; index++) {
+        const [err, res] = await generateImage(generationOptions)
 
-      result.push(res)
+        result.push(res)
+      }
+    } else {
+      // 异步调用4次接口（同步会报错只有最后一个接口会被调用）
+      for (let index = 0; index < 4; index++) {
+        const formData = new FormData()
+
+        Object.entries(generationOptions).forEach(([key, value]) => {
+          if (key === "image_file") {
+            formData.append(key, value, "filename.jpg")
+          } else if (key === "prompt") {
+            formData.append("prompt", "-")
+          } else {
+            formData.append(key, value)
+          }
+        })
+
+        formData.append("image_weight", "50")
+
+        const [err, res] = await generateImageByRemix(formData)
+
+        result.push(res)
+      }
     }
 
     const timestamp = Date.now()
-    const imgUrls = JSON.stringify(result.map(item => item.data.data[0].url))
+    const imgUrls = JSON.stringify(result.map(item => item?.data?.data[0].url))
 
     localStorage.setItem(`generatedImgList_${timestamp}`, imgUrls)
 
     // todo 这里是否针对某个错误进行判断，如果有错误的话再调用接口直到有4张图片呢？
 
-    router.push(`/imagePreselection?timestamp=${timestamp}`)
+    if (result.map(item => item?.data?.data[0].url).some((item: string) => item)) {
+      router.push(`/imagePreselection?timestamp=${timestamp}`)
+    } else {
+      Alert.open({
+        content: "生成失败"
+      })
+    }
 
     setTimeout(() => {
       setLoadingTime(0)
@@ -152,6 +233,15 @@ function Dashboard() {
     setLoading(false)
   }
 
+  const imageProps = React.useMemo(() => {
+    if (uploadedImgType === "horizontal") {
+      return { w: "100%" }
+    } else if (uploadedImgType === "vertical") {
+      return { h: "100%" }
+    }
+    return {}
+  }, [uploadedImgType])
+
   return (
     <Container className="parameter-config-container">
       <Wrapper>
@@ -159,9 +249,9 @@ function Dashboard() {
           {/* 选择设计类型 */}
           <DesignType>
             <Flex w={"50%"} h={"3.75rem"} bgColor={"#FFECEE"} position={"relative"}>
-              <Image src={"/assets/images/parameterConfig/brush.svg"} alt="" />
+              <ChakraImage src={"/assets/images/parameterConfig/brush.svg"} alt="" />
               <span>插画设计</span>
-              <Image
+              <ChakraImage
                 alt=""
                 src={"/assets/images/parameterConfig/brush_bg.svg"}
                 boxSize={"2.5rem"}
@@ -173,9 +263,9 @@ function Dashboard() {
               />
             </Flex>
             <Flex w={"50%"} h={"3.75rem"} bgColor={"#F3F3F3"} position={"relative"}>
-              <Image src={"/assets/images/parameterConfig/artboard.svg"} />
+              <ChakraImage src={"/assets/images/parameterConfig/artboard.svg"} />
               <span>Logo插画设计</span>
-              <Image
+              <ChakraImage
                 alt=""
                 src={"/assets/images/parameterConfig/artboard_bg.svg"}
                 boxSize={"2.5rem"}
@@ -192,7 +282,17 @@ function Dashboard() {
             <Switch>
               <SwitchBg referenceType={referenceType} />
               <ReferenceItem onClick={() => setReferenceType("tips")}>提示语</ReferenceItem>
-              <ReferenceItem onClick={() => setReferenceType("picture")}>参考图</ReferenceItem>
+              <ReferenceItem
+                onClick={() => {
+                  // 切换到以参考图生成时，清空提示语
+                  setGenerationOptions({
+                    prompt: ""
+                  })
+                  setReferenceType("picture")
+                }}
+              >
+                参考图
+              </ReferenceItem>
             </Switch>
             <Show
               when={referenceType === "tips"}
@@ -204,11 +304,32 @@ function Dashboard() {
                   h={"15rem"}
                   borderRadius={"0.5rem"}
                   bgColor={"#f5f5f5"}
+                  onClick={handleUploadImg}
                 >
-                  <Image h={"3.5rem"} mb={"0.75rem"} src={"/assets/images/parameterConfig/uploadImgPlaceholder.png"} />
-                  <Text fontSize={"0.81rem"} fontWeight={"400"} color={"#bfbfbf"} lineHeight={"1.25rem"}>
-                    请点击上传图片
-                  </Text>
+                  <Show
+                    when={generationOptions.image_file}
+                    fallback={
+                      <>
+                        <ChakraImage
+                          h={"3.5rem"}
+                          mb={"0.75rem"}
+                          src={"/assets/images/parameterConfig/uploadImgPlaceholder.png"}
+                        />
+                        <Text fontSize={"0.81rem"} fontWeight={"400"} color={"#bfbfbf"} lineHeight={"1.25rem"}>
+                          请点击上传图片
+                        </Text>
+                      </>
+                    }
+                  >
+                    {uploadedImgSrc && (
+                      <Show
+                        when={uploadedImgType === "horizontal"}
+                        fallback={<ChakraImage h={"100%"} src={uploadedImgSrc} alt="Preview" />}
+                      >
+                        <ChakraImage w={"100%"} src={uploadedImgSrc} alt="Preview" />
+                      </Show>
+                    )}
+                  </Show>
                 </Flex>
               }
             >
@@ -253,7 +374,7 @@ function Dashboard() {
                       }}
                       key={item.value}
                     >
-                      <Image src={checked ? item.selectedImgUrl : item.imgUrl} />
+                      <ChakraImage src={checked ? item.selectedImgUrl : item.imgUrl} />
                       <div>{item.label}</div>
                     </OrientationItem>
                   )
@@ -268,7 +389,6 @@ function Dashboard() {
                       setGenerationOptions({
                         aspect_ratio: item.value as aspectRatioType
                       })
-                      setAspectRadio(item.value)
                     }}
                     checked={generationOptions.aspect_ratio === item.value}
                     key={item.value}

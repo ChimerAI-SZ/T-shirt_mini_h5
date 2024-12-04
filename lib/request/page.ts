@@ -155,6 +155,20 @@ export const generateImage = async (imageRequest: IdeogramImageRequest) => {
   })
 }
 
+// Ideogram API 接口使用 apiInstance
+export const generateImageByRemix = async (imageRequest: any) => {
+  return errorCaptureRes(async () => {
+    try {
+      const response = await instance.post("/api/ideogram/remix", imageRequest)
+      return response
+    } catch (error: any) {
+      // 提取详细错误信息
+      const errorMessage = error.response?.data?.details || error.response?.data?.error || error.message
+      throw new Error(errorMessage)
+    }
+  })
+}
+
 // 图片编辑接口
 export const editImage = async (imageRequest: IdeogramImageRequest & { image_url: string }) => {
   return errorCaptureRes(async () => {
