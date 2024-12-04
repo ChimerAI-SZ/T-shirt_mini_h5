@@ -155,7 +155,7 @@ function Dashboard() {
   return (
     <Container className="parameter-config-container">
       <Wrapper>
-        <Flex flexDirection="column" w={"100%"} mb={"3.8rem"}>
+        <Flex flexDirection="column" w={"100%"} overflow={"auto"}>
           {/* 选择设计类型 */}
           <DesignType>
             <Flex w={"50%"} h={"3.75rem"} bgColor={"#FFECEE"} position={"relative"}>
@@ -444,6 +444,7 @@ const SwitchBg = styled.div<SwitchBgType>`
 `
 const RatioSelector = styled(Section)`
   flex-direction: column;
+  margin-bottom: 3.8rem;
 `
 const SubTitle = styled.div`
   font-weight: 600;
