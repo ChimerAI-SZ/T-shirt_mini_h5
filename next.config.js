@@ -19,7 +19,8 @@ module.exports = {
         hostname: "mind-file.oss-cn-beijing.aliyuncs.com"
       },
     ],
-    unoptimized: true
+    unoptimized: true,
+    domains: ['your-image-domain.com'],
   },
   async rewrites() {
     return [

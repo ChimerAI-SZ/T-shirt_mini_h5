@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import styles from "./page.module.css"
 import { PreviewArea } from "./components/PreviewArea"
 import { TabNavigation } from "./components/TabNavigation"
@@ -13,6 +13,7 @@ import { fetchPrintedTop, getQuery } from "@/lib/request/printed-top"
 import { Alert } from "@/components/Alert"
 export default function PrintedTopPage() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const timestamp = searchParams.get("timestamp")
   const url = localStorage.getItem(`selectedImg_${timestamp}`) || ""
   const printImage = url
@@ -84,8 +85,9 @@ export default function PrintedTopPage() {
       const { result, success, message } = resultData || {}
 
       if (success) {
-        setImage(result.res.image)
+        setImage(result.data.imageFiles[0].url)
         setTaskId("")
+        router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.data.imageFiles[0].url)}`)
       } else {
         console.log(`Task ${taskID} still in progress`)
       }
