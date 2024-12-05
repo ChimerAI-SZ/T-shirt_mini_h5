@@ -378,7 +378,6 @@ function Dashboard() {
                   resize="none"
                   h={"15rem"}
                   placeholder="请输入一些描述"
-                  maxLength={200}
                 />
               </Box>
             </Show>
