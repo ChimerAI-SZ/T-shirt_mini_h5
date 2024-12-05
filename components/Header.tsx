@@ -34,7 +34,7 @@ function Page({ show, noTitle, cb }: { show?: boolean; noTitle?: boolean; cb?: (
             textAlign="center"
             color={noTitle ? "transparent" : "#171717"}
           >
-            CREAMODA
+            CHIMERAI X SIDA
           </Text>
         }
       >
