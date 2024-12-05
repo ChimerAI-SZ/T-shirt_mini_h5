@@ -211,13 +211,13 @@ function Dashboard() {
     }
 
     const timestamp = Date.now()
-    const imgUrls = JSON.stringify(result.map(item => item?.data?.data[0].url))
+    const imgUrls = JSON.stringify(result.map(item => item?.data[0]?.url))
 
     localStorage.setItem(`generatedImgList_${timestamp}`, imgUrls)
 
     // todo 这里是否针对某个错误进行判断，如果有错误的话再调用接口直到有4张图片呢？
 
-    if (result.map(item => item?.data?.data[0].url).some((item: string) => item)) {
+    if (result.map(item => item?.data[0].url).some((item: string) => item)) {
       router.push(`/imagePreselection?timestamp=${timestamp}`)
     } else {
       Alert.open({
