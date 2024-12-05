@@ -103,7 +103,6 @@ function Dashboard() {
       const target = e.target as HTMLInputElement
       const file = target.files?.[0]
       if (file) {
-        console.log(file)
         setGenerationOptions({
           image_file: file
         })
@@ -178,20 +177,36 @@ function Dashboard() {
 
     // 异步函数，用于生成一张图片并返回结果
 
-    const result = []
+    let result = []
 
     if (referenceType === "tips") {
-      // 异步调用4次接口（同步会报错只有最后一个接口会被调用）
-      for (let index = 0; index < 4; index++) {
+      // 定义一个函数，用于生成一张图片并返回结果
+      const generateOneImage = async () => {
         const [err, res] = await generateImage(generationOptions)
 
-        result.push(res)
+        if (err || (res && !res?.success)) {
+          Alert.open({
+            content: err.message ?? res.message
+          })
+        } else if (res?.success && res?.data?.length > 0) {
+          // 可以在这里处理成功的结果，例如保存图片数据
+        }
+        return res
       }
-    } else {
-      // 异步调用4次接口（同步会报错只有最后一个接口会被调用）
-      for (let index = 0; index < 4; index++) {
-        const formData = new FormData()
 
+      // 同时调用4次generateOneImage函数
+      const promises = []
+      for (let i = 0; i < 4; i++) {
+        promises.push(generateOneImage())
+      }
+
+      // 等待所有图片生成完成
+      const results = await Promise.allSettled(promises)
+      result = results.filter(item => item.status === "fulfilled").map(item => item.value.data)
+    } else {
+      // 定义一个函数，用于生成一张图片并返回结果
+      const generateOneImage = async () => {
+        const formData = new FormData()
         Object.entries(generationOptions).forEach(([key, value]) => {
           if (key === "image_file") {
             formData.append(key, value, "filename.jpg")
@@ -206,8 +221,25 @@ function Dashboard() {
 
         const [err, res] = await generateImageByRemix(formData)
 
-        result.push(res)
+        if (err || (res && !res?.success)) {
+          Alert.open({
+            content: err.message ?? res.message
+          })
+        } else if (res?.success && res?.data?.length > 0) {
+          // 可以在这里处理成功的结果，例如保存图片数据
+        }
+        return res
       }
+
+      // 同时调用4次generateOneImage函数
+      const promises = []
+      for (let i = 0; i < 4; i++) {
+        promises.push(generateOneImage())
+      }
+
+      // 等待所有图片生成完成
+      const results = await Promise.allSettled(promises)
+      result = results.filter(item => item.status === "fulfilled").map(item => item.value.data)
     }
 
     const timestamp = Date.now()
@@ -216,7 +248,6 @@ function Dashboard() {
     localStorage.setItem(`generatedImgList_${timestamp}`, imgUrls)
 
     // todo 这里是否针对某个错误进行判断，如果有错误的话再调用接口直到有4张图片呢？
-
     if (result.map(item => item?.data[0].url).some((item: string) => item)) {
       router.push(`/imagePreselection?timestamp=${timestamp}`)
     } else {

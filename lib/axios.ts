@@ -46,11 +46,6 @@ export const externalInstance = axios.create({
   timeout: 30000
 })
 
-export const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL || "/",
-  timeout: 30000
-})
-
 // 用于存储 pending 的请求（处理多条相同请求）
 const pendingRequest = new Map<string, CancelTokenSource>()
 
@@ -81,7 +76,7 @@ const removePendingRequest = (config: AxiosRequestConfig): void => {
 }
 
 // 为两个实例添加拦截器
-;[instance, apiInstance, externalInstance].forEach(instance => {
+;[apiInstance, externalInstance].forEach(instance => {
   instance.interceptors.request.use(
     config => {
       const extendedConfig = config as ExtendedAxiosRequestConfig
@@ -123,5 +118,50 @@ const removePendingRequest = (config: AxiosRequestConfig): void => {
     }
   )
 })
+
+// 用于请求后端转发 ideogram api 的 Axios 实例（区别是去掉了重复调用接口的拦截
+export const instance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL || "/",
+  timeout: 30000
+})
+
+instance.interceptors.request.use(
+  config => {
+    const extendedConfig = config as ExtendedAxiosRequestConfig
+
+    const TOKEN = storage.get("token")
+    if (TOKEN) {
+      extendedConfig.headers = extendedConfig.headers || {}
+      extendedConfig.headers["Content-Type"] = extendedConfig.headers["Content-Type"] || "text/plain"
+      extendedConfig.headers.Authorization = TOKEN
+    }
+
+    return extendedConfig
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
+
+instance.interceptors.response.use(
+  (response: AxiosResponse) => {
+    // 在一个 ajax 响应后再执行一下取消操作，把已经完成的请求从 pending 中移除
+    removePendingRequest(response.config)
+    if (response.status === 401) {
+      exitLogin()
+    }
+    return response.data
+  },
+  error => {
+    const { status } = error?.response || {}
+    if (status === 500) {
+      window.$message?.destroy()
+      console.error(status)
+    } else if (status === 401) {
+      exitLogin()
+    }
+    return Promise.reject(error)
+  }
+)
 
 export default apiInstance
