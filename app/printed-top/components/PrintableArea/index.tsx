@@ -239,7 +239,7 @@ export function PrintableArea({ previewImage, defaultPrint, onPositionChange, in
               x: Math.round(img.left * 2.133),
               y: Math.round(img.top * 2.133),
               scale: Number(((img.scaleX || 1) * 2.133).toFixed(4)),
-              rotation: img.angle || 0
+              rotation: Math.round(img.angle || 0)
             }
 
             onPositionChange?.(newPosition)
@@ -254,7 +254,7 @@ export function PrintableArea({ previewImage, defaultPrint, onPositionChange, in
             x: Math.round(img.left! * 2.133),
             y: Math.round(img.top! * 2.133),
             scale: Number(((img.scaleX || 1) * 2.133).toFixed(4)),
-            rotation: img.angle || 0
+            rotation: Math.round(img.angle || 0)
           }
 
           onPositionChange?.(currentPosition)
