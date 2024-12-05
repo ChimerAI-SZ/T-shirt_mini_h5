@@ -9,14 +9,15 @@ import { TabContent } from "./components/TabContent"
 import { BackgroundToggle } from "./components/BackgroundToggle"
 import { PrintPosition, StyleOption, ColorOption, ModelOption } from "./types"
 import { styleOptions, colorOptions, tabs, maleImages, femaleImages, modelOptions } from "./constants"
-import { getPrintedPreview } from "./api"
-
+import { fetchPrintedTop, getQuery } from "@/lib/request/printed-top"
+import { Alert } from "@/components/Alert"
 export default function PrintedTopPage() {
   const searchParams = useSearchParams()
-  const printImage = `/api/proxy?url=${encodeURIComponent(searchParams.get("printImage") || "https://ch-testing.oss-cn-beijing.aliyuncs.com/test_image/Asset%205%404x.png")}`
-  const print =
-    searchParams.get("printImage") || "https://ch-testing.oss-cn-beijing.aliyuncs.com/test_image/Asset%205%404x.png"
-
+  const timestamp = searchParams.get("timestamp")
+  const url = localStorage.getItem(`selectedImg_${timestamp}`) || ""
+  const printImage = url
+  const print = url
+  const [image, setImage] = useState()
   const [activeTab, setActiveTab] = useState("style")
   const [removeBackground, setRemoveBackground] = useState(false)
   const [selectedStyle, setSelectedStyle] = useState<StyleOption | null>(styleOptions[0])
@@ -30,7 +31,7 @@ export default function PrintedTopPage() {
     rotation: 0
   })
   const [originalImage, setOriginalImage] = useState<string>("")
-
+  const [taskId, setTaskId] = useState("")
   useEffect(() => {
     setMounted(true)
     return () => setMounted(false)
@@ -64,11 +65,45 @@ export default function PrintedTopPage() {
         removePrintingBackground: removeBackground,
         userUUID: "string"
       }
-      console.log("接口params", params)
+      const result = await fetchPrintedTop(params)
+      if (result?.data?.taskID) {
+        setTaskId(result.data.taskID)
+      }
+      if (!result?.data?.taskID) {
+        Alert.open({
+          content: "生成失败！"
+        })
+      }
     } catch (error) {
       console.error("Failed to get preview:", error)
     }
   }
+  const getImage = async (taskID: string) => {
+    try {
+      const resultData: any = await getQuery({ taskID })
+      const { result, success, message } = resultData || {}
+
+      if (success) {
+        setImage(result.res.image)
+        setTaskId("")
+      } else {
+        console.log(`Task ${taskID} still in progress`)
+      }
+    } catch (err) {
+      setTaskId("")
+    }
+  }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (taskId) {
+        getImage(taskId)
+      }
+    }, 5000)
+    return () => {
+      console.log("Cleaning up interval")
+      clearInterval(interval)
+    }
+  }, [taskId])
 
   const handlePositionChange = (position: PrintPosition) => {
     setPrintPosition({

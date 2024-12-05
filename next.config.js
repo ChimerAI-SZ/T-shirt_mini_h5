@@ -13,16 +13,20 @@ module.exports = {
       {
         protocol: "https",
         hostname: "brain-testing.oss-cn-beijing.aliyuncs.com"
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "mind-file.oss-cn-beijing.aliyuncs.com"
+      },
     ],
     unoptimized: true
   },
   async rewrites() {
     return [
-      {
-        source: '/api/proxy-image',
-        destination: 'https://brain-testing.oss-cn-beijing.aliyuncs.com/:path*'
-      }
+      // {
+      //   source: '/api/proxy-image',
+      //   destination: 'https://mind-file.oss-cn-beijing.aliyuncs.com/:path*'
+      // }
     ]
   },
   compiler: {

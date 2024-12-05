@@ -19,11 +19,13 @@ export interface AxiosResponse<T = any, D = any> {
   headers: RawAxiosResponseHeaders | AxiosResponseHeaders
   config: InternalAxiosRequestConfig<D>
   request?: any
+  msg?: string
 }
 interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   cancelToken?: CancelTokenSource["token"]
   headers: AxiosRequestHeaders
   data?: any
+  msg?: string
 }
 
 declare global {

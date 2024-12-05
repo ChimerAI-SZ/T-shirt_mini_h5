@@ -21,7 +21,7 @@ const ImagePreselection = () => {
 
     localStorage.setItem(`selectedImg_${timestamp}`, url)
 
-    router.push(`/clothPreview?timestamp=${timestamp}`)
+    router.push(`/printed-top?timestamp=${timestamp}`)
   }
 
   useEffect(() => {

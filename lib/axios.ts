@@ -12,6 +12,7 @@ interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   cancelToken?: CancelTokenSource["token"]
   headers: AxiosRequestHeaders
   data?: any
+  msg?: string
 }
 
 // 统一定义一下 axios 返回类型
@@ -26,6 +27,7 @@ export interface AxiosResponse<T = any, D = any> {
   headers: RawAxiosResponseHeaders | AxiosResponseHeaders
   config: InternalAxiosRequestConfig<D>
   request?: any
+  msg?: string
 }
 
 declare global {
@@ -39,11 +41,11 @@ declare global {
 
 // 创建两个 axios 实例，一个用于 API 请求，一个用于外部请求
 export const apiInstance = axios.create({
-  timeout: 30000
+  timeout: 50000
 })
 
 export const externalInstance = axios.create({
-  timeout: 30000
+  timeout: 50000
 })
 
 // 用于存储 pending 的请求（处理多条相同请求）
