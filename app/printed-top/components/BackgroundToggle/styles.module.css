@@ -71,6 +71,7 @@ input:checked + .slider:before {
   text-align: left;
   font-style: normal;
   flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
