@@ -21,13 +21,13 @@ export default function UpperDisplay() {
     // 检查 wx.miniProgram 是否存在
     if (typeof wx !== "undefined" && wx?.miniProgram) {
       wx.miniProgram.navigateTo({
-        url: "/pages/cart/cart"
+        url: "pages/addtocart/index"
       })
     }
 
     if (typeof window !== "undefined" && window.wx?.miniProgram) {
       window.wx.miniProgram.navigateTo({
-        url: "/pages/cart/cart"
+        url: "pages/addtocart/index"
       })
     }
   }
