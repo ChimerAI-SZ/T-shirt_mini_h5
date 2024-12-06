@@ -358,7 +358,7 @@ function Dashboard() {
   }
   return (
     <Container className="parameter-config-container">
-      <Button onClick={handleAddToCart}>测试小程序跳转</Button>
+      {/* <Button onClick={handleAddToCart}>测试小程序跳转</Button> */}
 
       <Wrapper>
         <Flex flexDirection="column" w={"100%"} overflow={"auto"}>
