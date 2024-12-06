@@ -115,7 +115,7 @@ export default function PrintedTopPage() {
         // router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.res)}`)
         if (typeof wx !== "undefined" && wx?.miniProgram) {
           wx.miniProgram.navigateTo({
-            url: `/pages/addtocart/index?imageUrl=${encodeURIComponent(result.res)}`
+            url: `/pages/addtocart/index?imageUrl=${result.res}`
           })
         }
       } else {
