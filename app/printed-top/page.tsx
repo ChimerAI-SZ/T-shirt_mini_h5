@@ -12,6 +12,7 @@ import { styleOptions, colorOptions, tabs, maleImages, femaleImages, modelOption
 import { fetchPrintedTop, getQuery } from "@/lib/request/printed-top"
 import { Alert } from "@/components/Alert"
 import { Button } from "@/components/ui/button"
+import { Box } from "@chakra-ui/react"
 
 export default function PrintedTopPage() {
   const searchParams = useSearchParams()
@@ -73,32 +74,31 @@ export default function PrintedTopPage() {
 
   const handlePreviewClick = async () => {
     setIsLoading(true)
-    router.push(`/upperDisplay?imageUrl=${encodeURIComponent(print)}`)
-    // try {
-    //   const params = {
-    //     loadOriginalImage: originalImage,
-    //     loadGarmentImage: selectedColor?.image || "",
-    //     loadPrintingImage: print,
-    //     printingX: printPosition.x,
-    //     printingY: printPosition.y,
-    //     printingScale: printPosition.scale || 1,
-    //     printingRotate: printPosition.rotation,
-    //     removePrintingBackground: removeBackground,
-    //     userUUID: "string"
-    //   }
-    //   const result = await fetchPrintedTop(params)
-    //   if (result?.data?.taskID) {
-    //     setTaskId(result.data.taskID)
-    //   } else {
-    //     setIsLoading(false)
-    //     Alert.open({
-    //       content: "生成失败！"
-    //     })
-    //   }
-    // } catch (error) {
-    //   setIsLoading(false)
-    //   console.error("Failed to get preview:", error)
-    // }
+    try {
+      const params = {
+        loadOriginalImage: originalImage,
+        loadGarmentImage: selectedColor?.image || "",
+        loadPrintingImage: print,
+        printingX: printPosition.x,
+        printingY: printPosition.y,
+        printingScale: printPosition.scale || 1,
+        printingRotate: printPosition.rotation,
+        removePrintingBackground: removeBackground,
+        userUUID: "string"
+      }
+      const result = await fetchPrintedTop(params)
+      if (result?.data?.taskID) {
+        setTaskId(result.data.taskID)
+      } else {
+        setIsLoading(false)
+        Alert.open({
+          content: "生成失败！"
+        })
+      }
+    } catch (error) {
+      setIsLoading(false)
+      console.error("Failed to get preview:", error)
+    }
   }
   const getImage = async (taskID: string) => {
     try {
@@ -109,7 +109,7 @@ export default function PrintedTopPage() {
         setImage(result.data.imageFiles[0].url)
         setTaskId("")
         setIsLoading(false)
-        // router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.data.imageFiles[0].url)}`)
+        router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.data.imageFiles[0].url)}`)
       } else {
         console.log(`Task ${taskID} still in progress`)
       }
@@ -167,20 +167,39 @@ export default function PrintedTopPage() {
         />
       </div>
 
-      <div className={styles.bottomButton}>
-        <Button
-          onClick={handlePreviewClick}
-          disabled={!selectedColor || isLoading}
-          w={"16.69rem"}
-          bgColor={"#ee3939"}
-          borderRadius={"1.25rem"}
-          type="submit"
-          loading={isLoading}
-          loadingText={<span>{`上身中 ${elapsedTime}s...`}</span>}
-        >
-          上身效果
-        </Button>
-      </div>
+      <Box
+        position="fixed"
+        bottom="0"
+        left="0"
+        right="0"
+        padding="1rem"
+        background="#FFFFFF"
+        boxShadow="0rem 0rem 0.75rem 0rem rgba(0,0,0,0.06)"
+      >
+        <Box width="16.69rem" margin="0 auto">
+          <Button
+            onClick={handlePreviewClick}
+            disabled={!selectedColor || isLoading}
+            w={"16.69rem"}
+            borderRadius={"1.25rem"}
+            type="submit"
+            loading={isLoading}
+            loadingText={<span>{`上身中 ${elapsedTime}s...`}</span>}
+            width="100%"
+            height="2.5rem"
+            backgroundColor="#EE3939"
+            _hover={{ backgroundColor: "#D63232" }}
+            fontFamily="PingFangSC, PingFang SC"
+            fontWeight={400}
+            fontSize="0.94rem"
+            color="#FFFFFF"
+            lineHeight="1.44rem"
+            fontStyle="normal"
+          >
+            上身效果
+          </Button>
+        </Box>
+      </Box>
     </div>
   )
 }

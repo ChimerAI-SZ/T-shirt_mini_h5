@@ -286,9 +286,24 @@ function Dashboard() {
     clearInterval(interval)
     setLoading(false)
   }
+  const handleAddToCart = () => {
+    // 检查 wx.miniProgram 是否存在
+    if (typeof wx !== "undefined" && wx?.miniProgram) {
+      wx.miniProgram.navigateTo({
+        url: "pages/addtocart/index"
+      })
+    }
 
+    if (typeof window !== "undefined" && window.wx?.miniProgram) {
+      window.wx.miniProgram.navigateTo({
+        url: "pages/addtocart/index"
+      })
+    }
+  }
   return (
     <Container className="parameter-config-container">
+      <Button onClick={handleAddToCart}>测试小程序跳转</Button>
+
       <Wrapper>
         <Flex flexDirection="column" w={"100%"} overflow={"auto"}>
           {/* 选择设计类型 */}
