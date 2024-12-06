@@ -286,19 +286,53 @@ function Dashboard() {
     clearInterval(interval)
     setLoading(false)
   }
-  const handleAddToCart = () => {
-    // 检查 wx.miniProgram 是否存在
-    if (typeof wx !== "undefined" && wx?.miniProgram) {
-      wx.miniProgram.navigateTo({
-        url: "pages/addtocart/index"
-      })
+
+  // 修改类型定义部分
+  const handleMiniProgramNavigate = (url: string) => {
+    const navigateToMiniProgram = () => {
+      const wxInstance = typeof window !== "undefined" ? window.wx : wx
+      if (wxInstance?.miniProgram) {
+        wxInstance.miniProgram.navigateTo({
+          url,
+          success: () => {
+            console.log("跳转成功")
+          },
+          fail: err => {
+            Alert.open({
+              content: `跳转失败: ${err.errMsg || "未知错误"}`
+            })
+          }
+        })
+      } else {
+        Alert.open({
+          content: "当前环境不支持小程序跳转"
+        })
+      }
     }
 
-    if (typeof window !== "undefined" && window.wx?.miniProgram) {
-      window.wx.miniProgram.navigateTo({
-        url: "pages/addtocart/index"
+    // 先检查环境
+    const wxInstance = typeof window !== "undefined" ? window.wx : wx
+    console.log(wxInstance?.miniProgram)
+
+    if (wxInstance?.miniProgram) {
+      wxInstance.miniProgram.getEnv(res => {
+        if (res.miniprogram) {
+          navigateToMiniProgram()
+        } else {
+          Alert.open({
+            content: "请在小程序环境中使用"
+          })
+        }
+      })
+    } else {
+      Alert.open({
+        content: "未检测到小程序环境"
       })
     }
+  }
+
+  const handleAddToCart = () => {
+    handleMiniProgramNavigate("pages/addtocart/index")
   }
   return (
     <Container className="parameter-config-container">

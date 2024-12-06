@@ -3,15 +3,15 @@
 import { Box, Button, Container, Image } from "@chakra-ui/react"
 import { useSearchParams } from "next/navigation"
 
-declare global {
-  interface Window {
-    wx?: {
-      miniProgram: {
-        navigateTo: (options: { url: string }) => void
-      }
-    }
-  }
-}
+// declare global {
+//   interface Window {
+//     wx?: {
+//       miniProgram: {
+//         navigateTo: (options: { url: string }) => void
+//       }
+//     }
+//   }
+// }
 
 export default function UpperDisplay() {
   const searchParams = useSearchParams()
