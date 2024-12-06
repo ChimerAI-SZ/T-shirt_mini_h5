@@ -24,8 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </Providers>
+        <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
       </body>
-      <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
     </html>
   )
 }

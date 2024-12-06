@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import styles from "./page.module.css"
 import { PreviewArea } from "./components/PreviewArea"
@@ -11,6 +11,8 @@ import { PrintPosition, StyleOption, ColorOption, ModelOption } from "./types"
 import { styleOptions, colorOptions, tabs, maleImages, femaleImages, modelOptions } from "./constants"
 import { fetchPrintedTop, getQuery } from "@/lib/request/printed-top"
 import { Alert } from "@/components/Alert"
+import { Button } from "@/components/ui/button"
+
 export default function PrintedTopPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -33,6 +35,9 @@ export default function PrintedTopPage() {
   })
   const [originalImage, setOriginalImage] = useState<string>("")
   const [taskId, setTaskId] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [elapsedTime, setElapsedTime] = useState(0)
+
   useEffect(() => {
     setMounted(true)
     return () => setMounted(false)
@@ -53,7 +58,21 @@ export default function PrintedTopPage() {
     }
   }, [])
 
+  useEffect(() => {
+    let timer: NodeJS.Timeout
+    if (isLoading) {
+      timer = setInterval(() => {
+        setElapsedTime(prev => prev + 1)
+      }, 1000)
+    }
+    return () => {
+      clearInterval(timer)
+      setElapsedTime(0)
+    }
+  }, [isLoading])
+
   const handlePreviewClick = async () => {
+    setIsLoading(true)
     try {
       const params = {
         loadOriginalImage: originalImage,
@@ -69,13 +88,14 @@ export default function PrintedTopPage() {
       const result = await fetchPrintedTop(params)
       if (result?.data?.taskID) {
         setTaskId(result.data.taskID)
-      }
-      if (!result?.data?.taskID) {
+      } else {
+        setIsLoading(false)
         Alert.open({
           content: "生成失败！"
         })
       }
     } catch (error) {
+      setIsLoading(false)
       console.error("Failed to get preview:", error)
     }
   }
@@ -87,12 +107,14 @@ export default function PrintedTopPage() {
       if (success) {
         setImage(result.data.imageFiles[0].url)
         setTaskId("")
+        setIsLoading(false)
         router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.data.imageFiles[0].url)}`)
       } else {
         console.log(`Task ${taskID} still in progress`)
       }
     } catch (err) {
       setTaskId("")
+      setIsLoading(false)
     }
   }
   useEffect(() => {
@@ -145,9 +167,18 @@ export default function PrintedTopPage() {
       </div>
 
       <div className={styles.bottomButton}>
-        <button className={styles.previewButton} onClick={handlePreviewClick} disabled={!selectedColor}>
+        <Button
+          onClick={handlePreviewClick}
+          disabled={!selectedColor || isLoading}
+          w={"16.69rem"}
+          bgColor={"#ee3939"}
+          borderRadius={"1.25rem"}
+          type="submit"
+          loading={isLoading}
+          loadingText={<span>{`上身中 ${elapsedTime}s...`}</span>}
+        >
           上身效果
-        </button>
+        </Button>
       </div>
     </div>
   )
