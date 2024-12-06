@@ -290,7 +290,7 @@ function Dashboard() {
   // 修改类型定义部分
   const handleMiniProgramNavigate = (url: string) => {
     const navigateToMiniProgram = () => {
-      const wxInstance = typeof window !== "undefined" ? window.wx : wx
+      const wxInstance = typeof wx !== "undefined" ? wx : undefined
       if (wxInstance?.miniProgram) {
         wxInstance.miniProgram.navigateTo({
           url,
@@ -311,7 +311,7 @@ function Dashboard() {
     }
 
     // 先检查环境
-    const wxInstance = typeof window !== "undefined" ? window.wx : wx
+    const wxInstance = typeof wx !== "undefined" ? wx : undefined
     console.log(wxInstance?.miniProgram)
 
     if (wxInstance?.miniProgram) {
