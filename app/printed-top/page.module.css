@@ -26,7 +26,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 16px;
+  padding: 0.56rem 0rem 1.56rem;
   z-index: 100;
 }
 

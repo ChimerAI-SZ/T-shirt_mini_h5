@@ -141,7 +141,7 @@ const Footer = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
-  padding: 0.63rem 1rem;
+  padding: 0.56rem 1rem 1.56rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;

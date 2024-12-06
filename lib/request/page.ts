@@ -1,4 +1,4 @@
-import { instance, apiInstance } from "../axios"
+import { instance, instanceWithInterception } from "../axios"
 
 import { errorCaptureRes } from "@/utils/index"
 
@@ -169,34 +169,15 @@ export const generateImageByRemix = async (imageRequest: any) => {
   })
 }
 
-// 图片编辑接口
-export const editImage = async (imageRequest: IdeogramImageRequest & { image_url: string }) => {
+export const getImageDescription = async (body: any) => {
   return errorCaptureRes(async () => {
-    const response = await apiInstance.post(
-      "api/edit",
-      { image_request: imageRequest },
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-    )
-    return response
-  })
-}
-
-// 图片放大接口
-export const upscaleImage = async (imageUrl: string) => {
-  return errorCaptureRes(async () => {
-    const response = await apiInstance.post(
-      "api/upscale",
-      { image_url: imageUrl },
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-    )
-    return response
+    try {
+      const response = await instanceWithInterception.post("/api/ideogram/description", body)
+      return response
+    } catch (error: any) {
+      // 提取详细错误信息
+      const errorMessage = error.response?.data?.details || error.response?.data?.error || error.message
+      throw new Error(errorMessage)
+    }
   })
 }

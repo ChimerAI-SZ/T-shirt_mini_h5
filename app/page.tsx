@@ -5,7 +5,7 @@ import styled from "@emotion/styled"
 import { useRouter } from "next/navigation"
 import { useSetState } from "ahooks"
 
-import { generateImage, generateImageByRemix } from "@/lib/request/page"
+import { generateImage, generateImageByRemix, getImageDescription } from "@/lib/request/page"
 
 import { Flex, Show, Image as ChakraImage, Textarea, Box, Text, For, Grid } from "@chakra-ui/react"
 import { Button } from "@/components/ui/button"
@@ -202,8 +202,31 @@ function Dashboard() {
 
       // 等待所有图片生成完成
       const results = await Promise.allSettled(promises)
-      result = results.filter(item => item.status === "fulfilled").map(item => item.value.data)
+      result = results.filter(item => item.status === "fulfilled").map(item => item.value?.data)
     } else {
+      // 要先获取图片的 description 然后作为 remix 的 prompt 传入
+      const formData = new FormData()
+      Object.entries(generationOptions).forEach(([key, value]) => {
+        if (key === "image_file") {
+          formData.append(key, value, "filename.jpg")
+        }
+      })
+
+      const [err, res] = await getImageDescription(formData)
+      let prompt = "-"
+
+      if (err || (res && !res?.success)) {
+        Alert.open({
+          content: err.message ?? res.message
+        })
+      } else if (res?.success && res?.data.descriptions?.length > 0) {
+        // 可以在这里处理成功的结果，例如保存图片数据
+        prompt = res?.data.descriptions[0].text
+        setGenerationOptions({
+          prompt
+        })
+      }
+
       // 定义一个函数，用于生成一张图片并返回结果
       const generateOneImage = async () => {
         const formData = new FormData()
@@ -211,7 +234,7 @@ function Dashboard() {
           if (key === "image_file") {
             formData.append(key, value, "filename.jpg")
           } else if (key === "prompt") {
-            formData.append("prompt", "-")
+            formData.append("prompt", prompt)
           } else {
             formData.append(key, value)
           }
@@ -239,7 +262,7 @@ function Dashboard() {
 
       // 等待所有图片生成完成
       const results = await Promise.allSettled(promises)
-      result = results.filter(item => item.status === "fulfilled").map(item => item.value.data)
+      result = results.filter(item => item.status === "fulfilled").map(item => item.value?.data)
     }
 
     const timestamp = Date.now()
@@ -263,15 +286,6 @@ function Dashboard() {
     clearInterval(interval)
     setLoading(false)
   }
-
-  const imageProps = React.useMemo(() => {
-    if (uploadedImgType === "horizontal") {
-      return { w: "100%" }
-    } else if (uploadedImgType === "vertical") {
-      return { h: "100%" }
-    }
-    return {}
-  }, [uploadedImgType])
 
   return (
     <Container className="parameter-config-container">
@@ -452,8 +466,6 @@ function Dashboard() {
           </Button>
         </Footer>
       </Wrapper>
-
-      {/* <ImageGeneratorInput /> */}
     </Container>
   )
 }
