@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="159px" height="159px" viewBox="0 0 159 159" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="157px" height="157px" viewBox="0 0 157 157" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>编组 26备份</title>
     <defs>
         <rect id="path-1" x="0" y="0" width="157" height="157" rx="16"></rect>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="编组-26备份" transform="translate(1, 1)">
+        <g id="编组-26备份">
             <mask id="mask-2" fill="white">
                 <use xlink:href="#path-1"></use>
             </mask>
-            <rect stroke="#E3E3E3" x="-0.5" y="-0.5" width="158" height="158" rx="16"></rect>
+            <use id="蒙版" fill="#E8E1EF" xlink:href="#path-1"></use>
             <g id="编组-26" mask="url(#mask-2)" fill-rule="nonzero">
                 <g transform="translate(10, 22)">
                     <path d="M94.817611,135 L5.86333058,135 C4.65242535,135 3.47338605,134.792977 2.38994453,134.394856 C1.5295645,134.092284 0.732916322,133.694162 0,133.184567 C4.25410126,101.525966 35.5585979,65.8416442 56.0005901,62.3381773 C59.1393839,61.7967324 62.0391833,62.05153 64.7159212,62.9433216 C71.2165703,65.1091011 76.3469845,71.0968445 80.3939573,78.7407723 C81.0312758,79.9192111 81.6207955,81.09765 82.1784492,82.3557131 C90.989378,101.449608 94.2280913,128.980407 94.817611,135 Z" id="路径" fill="#B75542"></path>
