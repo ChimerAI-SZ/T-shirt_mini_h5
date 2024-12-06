@@ -289,8 +289,19 @@ function Dashboard() {
 
   // 修改类型定义部分
   const handleMiniProgramNavigate = (url: string) => {
+    if (typeof window !== "undefined") {
+      Alert.open({
+        content: "当前window"
+      })
+    }
+    if (typeof wx !== "undefined") {
+      Alert.open({
+        content: "当前wx"
+      })
+    }
+
     const navigateToMiniProgram = () => {
-      const wxInstance = typeof wx !== "undefined" ? wx : undefined
+      const wxInstance = typeof window !== "undefined" ? window.wx : wx
       if (wxInstance?.miniProgram) {
         wxInstance.miniProgram.navigateTo({
           url,
@@ -311,8 +322,7 @@ function Dashboard() {
     }
 
     // 先检查环境
-    const wxInstance = typeof wx !== "undefined" ? wx : undefined
-    console.log(wxInstance?.miniProgram)
+    const wxInstance = typeof window !== "undefined" ? window.wx : wx
 
     if (wxInstance?.miniProgram) {
       wxInstance.miniProgram.getEnv(res => {
@@ -332,6 +342,9 @@ function Dashboard() {
   }
 
   const handleAddToCart = () => {
+    Alert.open({
+      content: "进入"
+    })
     handleMiniProgramNavigate("pages/addtocart/index")
   }
   return (
