@@ -38,7 +38,7 @@
 .activeTab::after {
   content: "";
   position: absolute;
-  bottom: -0.1rem;
+  bottom: -0.25rem;
   left: 50%;
   transform: translateX(-50%);
   width: 1rem;

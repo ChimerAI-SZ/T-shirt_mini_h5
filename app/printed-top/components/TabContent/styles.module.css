@@ -18,10 +18,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px;
-  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
+  overflow: hidden;
 }
 
 .selected {
@@ -35,8 +34,8 @@
 
 .imageWrapper {
   position: relative;
-  width: 78px;
-  height: 78px;
+  width: 4.91rem;
+  height: 4.91rem;
   background: #ffffff;
   border-radius: 0.5rem;
   border: 0.03rem solid #e3e3e3;
@@ -65,8 +64,8 @@
 
 .comingSoonBadge {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: -0.1rem;
+  right: 0;
   padding: 2px 6px;
   font-family:
     PingFangSC,
@@ -74,7 +73,7 @@
   font-weight: 400;
   font-size: 0.69rem;
   color: #a6a6a6;
-  border-radius: 0rem 0.5rem 0rem 0.5rem;
+  border-radius: 0 0.5rem 0 0.5rem;
   background: #eeeeee;
   z-index: 1;
 }
@@ -91,13 +90,11 @@
 
 @media (max-width: 768px) {
   .optionsScroll {
-    grid-template-columns: repeat(auto-fill, minmax(3.6rem, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(4.3rem, 1fr));
+    gap: 0.1rem;
   }
-
   .imageWrapper {
     width: 3.78rem;
     height: 3.78rem;
-    border-radius: 0.25rem;
   }
 }

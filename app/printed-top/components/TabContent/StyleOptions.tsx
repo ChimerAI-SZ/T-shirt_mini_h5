@@ -19,8 +19,9 @@ export function StyleOptions({ selectedStyle, onStyleSelect }: StyleOptionsProps
             ${style.status === "coming" ? styles.comingSoon : ""}`}
           onClick={() => style.status === "active" && onStyleSelect(style)}
         >
-          {style.status === "coming" && <div className={styles.comingSoonBadge}>待上线</div>}
           <div className={styles.imageWrapper}>
+            {style.status === "coming" && <div className={styles.comingSoonBadge}>待上线</div>}
+
             <Image src={style.image} alt={style.name} width={120} height={120} className={styles.optionImage} />
           </div>
           <span className={styles.optionName}>{style.name}</span>
