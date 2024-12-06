@@ -234,7 +234,7 @@ function Dashboard() {
           if (key === "image_file") {
             formData.append(key, value, "filename.jpg")
           } else if (key === "prompt") {
-            formData.append("prompt", "-")
+            formData.append("prompt", prompt)
           } else {
             formData.append(key, value)
           }
