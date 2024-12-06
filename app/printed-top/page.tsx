@@ -75,26 +75,26 @@ export default function PrintedTopPage() {
   const handlePreviewClick = async () => {
     setIsLoading(true)
     try {
-      const params = {
-        loadOriginalImage: originalImage,
-        loadGarmentImage: selectedColor?.image || "",
-        loadPrintingImage: print,
-        printingX: printPosition.x,
-        printingY: printPosition.y,
-        printingScale: printPosition.scale || 1,
-        printingRotate: printPosition.rotation,
-        removePrintingBackground: removeBackground,
-        userUUID: "string"
-      }
-      const result = await fetchPrintedTop(params)
-      if (result?.data?.taskID) {
-        setTaskId(result.data.taskID)
-      } else {
-        setIsLoading(false)
-        Alert.open({
-          content: "生成失败！"
-        })
-      }
+      // const params = {
+      //   loadOriginalImage: originalImage,
+      //   loadGarmentImage: selectedColor?.image || "",
+      //   loadPrintingImage: print,
+      //   printingX: printPosition.x,
+      //   printingY: printPosition.y,
+      //   printingScale: printPosition.scale || 1,
+      //   printingRotate: printPosition.rotation,
+      //   removePrintingBackground: removeBackground,
+      //   userUUID: "string"
+      // }
+      // const result = await fetchPrintedTop(params)
+      // if (result?.data?.taskID) {
+      //   setTaskId(result.data.taskID)
+      // } else {
+      //   setIsLoading(false)
+      //   Alert.open({
+      //     content: "生成失败！"
+      //   })
+      // }
     } catch (error) {
       setIsLoading(false)
       console.error("Failed to get preview:", error)
