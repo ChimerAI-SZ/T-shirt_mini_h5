@@ -123,7 +123,7 @@ export function PrintableArea({ previewImage, defaultPrint, onPositionChange, in
           })
           // 限制移动范围和设置控制点
           img.setControlsVisibility({
-            mtr: true, // 旋转控制点
+            mtr: false, // 旋转控制点
             ml: false, // 禁用左中控制点
             mr: false, // 禁用右中控制点
             mt: false, // 禁用上中控制点
