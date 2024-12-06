@@ -299,7 +299,9 @@ function Dashboard() {
       Alert.open({
         content: "当前wx11"
       })
-      wx.miniProgram.navigateTo({ url: "/pages/addtocart/index" })
+      wx.miniProgram.navigateTo({
+        url: "/pages/addtocart/index?imageUrl=https://mind-file.oss-cn-beijing.aliyuncs.com/generated-images/image_d4e60469-8239-44ab-a0c2-aaf7776b46c3.png"
+      })
       // wx.miniProgram.redirectTo({
       //   url: '/pages/addtocart/index'
       // })
