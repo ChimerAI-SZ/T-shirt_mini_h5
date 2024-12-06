@@ -297,12 +297,6 @@ function Dashboard() {
 
     if (typeof wx !== "undefined" && wx?.miniProgram) {
       Alert.open({
-        content: "当前wx"
-      })
-      wx.miniProgram.navigateTo({ url: "pages/addtocart/index" })
-    }
-    if (typeof wx !== "undefined" && wx?.miniProgram) {
-      Alert.open({
         content: "当前wx11"
       })
       wx.miniProgram.navigateTo({ url: "/pages/addtocart/index" })
@@ -311,17 +305,18 @@ function Dashboard() {
     const navigateToMiniProgram = () => {
       const wxInstance = typeof window !== "undefined" ? window.wx : wx
       if (wxInstance?.miniProgram) {
-        wxInstance.miniProgram.navigateTo({
-          url,
-          success: () => {
-            console.log("跳转成功")
-          },
-          fail: err => {
-            Alert.open({
-              content: `跳转失败: ${err.errMsg || "未知错误"}`
-            })
-          }
-        })
+        // wxInstance.miniProgram.navigateTo({
+        //   url,
+        //   success: () => {
+        //     console.log("跳转成功")
+        //   },
+        //   fail: err => {
+        //     Alert.open({
+        //       content: `跳转失败: ${err.errMsg || "未知错误"}`
+        //     })
+        //   }
+        console.log(11)
+        // })
       } else {
         Alert.open({
           content: "当前环境不支持小程序跳转"
