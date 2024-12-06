@@ -86,6 +86,7 @@ export default function PrintedTopPage() {
         removePrintingBackground: removeBackground,
         userUUID: "string"
       }
+      console.log(params)
       const result = await fetchPrintedTop(params)
       if (result?.data?.taskID) {
         setTaskId(result.data.taskID)
