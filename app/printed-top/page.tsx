@@ -106,10 +106,12 @@ export default function PrintedTopPage() {
       const { result, success, message } = resultData || {}
 
       if (success) {
-        setImage(result.result.res)
+        setImage(result.res)
         setTaskId("")
         setIsLoading(false)
-        router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.result.res)}`)
+        console.log(result.res)
+        router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.res)}`)
+        console.log(11111)
       } else {
         console.log(`Task ${taskID} still in progress`)
       }
