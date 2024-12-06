@@ -51,12 +51,12 @@ export const externalInstance = axios.create({
 // 用于请求后端转发 ideogram api 的 Axios 实例（区别是去掉了重复调用接口的拦截
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL || "/",
-  timeout: 30000
+  timeout: 50000
 })
 // 保留拦截的用于请求后端转发 ideogram api 的 Axios 实例（
 export const instanceWithInterception = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL || "/",
-  timeout: 30000
+  timeout: 50000
 })
 
 // 用于存储 pending 的请求（处理多条相同请求）

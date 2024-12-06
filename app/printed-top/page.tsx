@@ -75,26 +75,26 @@ export default function PrintedTopPage() {
   const handlePreviewClick = async () => {
     setIsLoading(true)
     try {
-      // const params = {
-      //   loadOriginalImage: originalImage,
-      //   loadGarmentImage: selectedColor?.image || "",
-      //   loadPrintingImage: print,
-      //   printingX: printPosition.x,
-      //   printingY: printPosition.y,
-      //   printingScale: printPosition.scale || 1,
-      //   printingRotate: printPosition.rotation,
-      //   removePrintingBackground: removeBackground,
-      //   userUUID: "string"
-      // }
-      // const result = await fetchPrintedTop(params)
-      // if (result?.data?.taskID) {
-      //   setTaskId(result.data.taskID)
-      // } else {
-      //   setIsLoading(false)
-      //   Alert.open({
-      //     content: "生成失败！"
-      //   })
-      // }
+      const params = {
+        loadOriginalImage: originalImage,
+        loadGarmentImage: selectedColor?.image || "",
+        loadPrintingImage: print,
+        printingX: printPosition.x,
+        printingY: printPosition.y,
+        printingScale: printPosition.scale || 1,
+        printingRotate: printPosition.rotation,
+        removePrintingBackground: removeBackground,
+        userUUID: "string"
+      }
+      const result = await fetchPrintedTop(params)
+      if (result?.data?.taskID) {
+        setTaskId(result.data.taskID)
+      } else {
+        setIsLoading(false)
+        Alert.open({
+          content: "生成失败！"
+        })
+      }
     } catch (error) {
       setIsLoading(false)
       console.error("Failed to get preview:", error)
@@ -106,10 +106,10 @@ export default function PrintedTopPage() {
       const { result, success, message } = resultData || {}
 
       if (success) {
-        setImage(result.data.imageFiles[0].url)
+        setImage(result.result.res)
         setTaskId("")
         setIsLoading(false)
-        router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.data.imageFiles[0].url)}`)
+        router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.result.res)}`)
       } else {
         console.log(`Task ${taskID} still in progress`)
       }

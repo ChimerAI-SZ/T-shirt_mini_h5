@@ -299,13 +299,13 @@ function Dashboard() {
       Alert.open({
         content: "当前wx"
       })
-      wx.miniProgram.navigateTo({ url: "pages/cart/index" })
+      wx.miniProgram.navigateTo({ url: "pages/addtocart/index" })
     }
     if (typeof wx !== "undefined" && wx?.miniProgram) {
       Alert.open({
         content: "当前wx11"
       })
-      wx.miniProgram.navigateTo({ url: "/pages/cart/index" })
+      wx.miniProgram.navigateTo({ url: "/pages/addtocart/index" })
     }
 
     const navigateToMiniProgram = () => {
