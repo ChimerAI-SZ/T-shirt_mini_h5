@@ -294,10 +294,12 @@ function Dashboard() {
         content: "当前window"
       })
     }
-    if (typeof wx !== "undefined") {
+
+    if (typeof wx !== "undefined" && wx?.miniProgram) {
       Alert.open({
         content: "当前wx"
       })
+      wx.miniProgram.navigateTo({ url: "/" })
     }
 
     const navigateToMiniProgram = () => {
