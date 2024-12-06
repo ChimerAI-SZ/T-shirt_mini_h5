@@ -299,7 +299,7 @@ function Dashboard() {
       Alert.open({
         content: "当前wx11"
       })
-      wx.miniProgram.navigateTo({ url: "/pages/pages/addtocart/index" })
+      wx.miniProgram.navigateTo({ url: "src/pages/addtocart/index" })
       // wx.miniProgram.navigateBack({ delta: 1 })
     }
 
