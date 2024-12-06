@@ -109,9 +109,12 @@ export default function PrintedTopPage() {
         setImage(result.res)
         setTaskId("")
         setIsLoading(false)
-        console.log(result.res)
-        router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.res)}`)
-        console.log(11111)
+        // router.push(`/upperDisplay?imageUrl=${encodeURIComponent(result.res)}`)
+        if (typeof wx !== "undefined" && wx?.miniProgram) {
+          wx.miniProgram.navigateTo({
+            url: `/pages/addtocart/index?imageUrl=${encodeURIComponent(result.res)}`
+          })
+        }
       } else {
         console.log(`Task ${taskID} still in progress`)
       }
