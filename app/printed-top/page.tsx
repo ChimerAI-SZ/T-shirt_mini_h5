@@ -106,7 +106,7 @@ export default function PrintedTopPage() {
   const getImage = async (taskID: string) => {
     try {
       const resultData: any = await getQuery({ taskID })
-      const { result, success, message } = resultData || {}
+      const { result, success, message, err } = resultData || {}
 
       if (success) {
         setImage(result.res)
@@ -120,6 +120,12 @@ export default function PrintedTopPage() {
         }
       } else {
         console.log(`Task ${taskID} still in progress`)
+      }
+      if (err) {
+        setTaskId("")
+        setIsLoading(false)
+        setImage(undefined)
+        setElapsedTime(0)
       }
     } catch (err) {
       setTaskId("")
