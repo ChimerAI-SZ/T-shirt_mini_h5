@@ -18,7 +18,9 @@ export default function PrintedTopPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const timestamp = searchParams.get("timestamp")
-  const url = localStorage.getItem(`selectedImg_${timestamp}`) || ""
+  const url =
+    localStorage.getItem(`selectedImg_${timestamp}`) ||
+    "https://mind-file.oss-cn-beijing.aliyuncs.com/generated-images/image_4fac4ac9-6699-49b5-8788-ba7ae07ab8d4.png"
   const printImage = url
   const print = url
   const [image, setImage] = useState()
