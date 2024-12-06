@@ -19,9 +19,12 @@ export default function UpperDisplay() {
 
   const handleAddToCart = () => {
     // 检查 wx.miniProgram 是否存在
-    wx.miniProgram.navigateTo({
-      url: "/pages/cart/cart"
-    })
+    if (typeof wx !== "undefined" && wx?.miniProgram) {
+      wx.miniProgram.navigateTo({
+        url: "/pages/cart/cart"
+      })
+    }
+
     if (typeof window !== "undefined" && window.wx?.miniProgram) {
       window.wx.miniProgram.navigateTo({
         url: "/pages/cart/cart"
