@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import styled from "@emotion/styled"
 import { useRouter } from "next/navigation"
 import { useSetState } from "ahooks"
@@ -92,7 +92,10 @@ function Dashboard() {
     image_file: null
   })
 
+  const [imgContainerRatio, setImgContainerRatio] = useState(1) // 上传图片容器的横纵比
+
   const router = useRouter()
+  const imageContainerRef = useRef<null | HTMLDivElement>(null)
 
   // 点击上传图片事件
   const handleUploadImg = () => {
@@ -127,10 +130,8 @@ function Dashboard() {
     img.onload = () => {
       const width = img.width
       const height = img.height
-      console.log(width, height)
-      if (width > height) {
-        setUploadedImgType("horizontal") // 横向图片
-      } else if (height > width) {
+
+      if (height / width < imgContainerRatio) {
         setUploadedImgType("vertical") // 竖向图片
       } else {
         setUploadedImgType("horizontal") // 正方形图片
@@ -356,6 +357,15 @@ function Dashboard() {
     })
     handleMiniProgramNavigate("pages/addtocart/index")
   }
+
+  useEffect(() => {
+    if (imageContainerRef.current) {
+      const ratio = imageContainerRef.current.clientWidth / imageContainerRef.current.clientHeight
+      console.log(ratio, "ratio")
+      setImgContainerRatio(ratio)
+    }
+  }, [imageContainerRef.current])
+
   return (
     <Container className="parameter-config-container">
       {/* <Button onClick={handleAddToCart}>测试小程序跳转</Button> */}
@@ -410,45 +420,7 @@ function Dashboard() {
                 参考图
               </ReferenceItem>
             </Switch>
-            <Show
-              when={referenceType === "tips"}
-              fallback={
-                <Flex
-                  flexDirection={"column"}
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                  h={"15rem"}
-                  borderRadius={"0.5rem"}
-                  bgColor={"#f5f5f5"}
-                  onClick={handleUploadImg}
-                >
-                  <Show
-                    when={generationOptions.image_file}
-                    fallback={
-                      <>
-                        <ChakraImage
-                          h={"3.5rem"}
-                          mb={"0.75rem"}
-                          src={"/assets/images/parameterConfig/uploadImgPlaceholder.png"}
-                        />
-                        <Text fontSize={"0.81rem"} fontWeight={"400"} color={"#bfbfbf"} lineHeight={"1.25rem"}>
-                          请点击上传图片
-                        </Text>
-                      </>
-                    }
-                  >
-                    {uploadedImgSrc && (
-                      <Show
-                        when={uploadedImgType === "horizontal"}
-                        fallback={<ChakraImage h={"100%"} src={uploadedImgSrc} alt="Preview" />}
-                      >
-                        <ChakraImage w={"100%"} src={uploadedImgSrc} alt="Preview" />
-                      </Show>
-                    )}
-                  </Show>
-                </Flex>
-              }
-            >
+            {referenceType === "tips" && (
               <Box h={"15rem"} position={"relative"}>
                 <StyledTextarea
                   onChange={e => {
@@ -465,7 +437,44 @@ function Dashboard() {
                   placeholder="请输入一些描述"
                 />
               </Box>
-            </Show>
+            )}
+            {referenceType === "picture" && (
+              <Flex
+                ref={imageContainerRef}
+                flexDirection={"column"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                h={"15rem"}
+                borderRadius={"0.5rem"}
+                bgColor={"#f5f5f5"}
+                onClick={handleUploadImg}
+              >
+                <Show
+                  when={generationOptions.image_file}
+                  fallback={
+                    <>
+                      <ChakraImage
+                        h={"3.5rem"}
+                        mb={"0.75rem"}
+                        src={"/assets/images/parameterConfig/uploadImgPlaceholder.png"}
+                      />
+                      <Text fontSize={"0.81rem"} fontWeight={"400"} color={"#bfbfbf"} lineHeight={"1.25rem"}>
+                        请点击上传图片
+                      </Text>
+                    </>
+                  }
+                >
+                  {uploadedImgSrc && (
+                    <Show
+                      when={uploadedImgType === "horizontal"}
+                      fallback={<ChakraImage h={"100%"} src={uploadedImgSrc} alt="Preview" />}
+                    >
+                      <ChakraImage w={"100%"} src={uploadedImgSrc} alt="Preview" />
+                    </Show>
+                  )}
+                </Show>
+              </Flex>
+            )}
           </ReferenceSection>
           {/* 选择比例 */}
           <RatioSelector>
