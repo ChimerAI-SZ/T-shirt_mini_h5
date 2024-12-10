@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import styled from "@emotion/styled"
 import { useRouter, useSearchParams } from "next/navigation"
 
@@ -10,6 +10,10 @@ import { Button } from "@/components/ui/button"
 const ImagePreselection = () => {
   const [selectedImgIndex, setSelectedImgIndex] = useState(0)
   const [imgUrlList, setImgUrlList] = useState<string[]>([])
+
+  const [footerHeight, setFooterHeight] = useState(80) // footer 区块高度
+
+  const footerRef = useRef<null | HTMLDivElement>(null)
 
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -25,6 +29,13 @@ const ImagePreselection = () => {
   }
 
   useEffect(() => {
+    // 获取底部按钮区的高度，用于占位块
+    if (footerRef.current) {
+      setFooterHeight(footerRef.current.clientHeight + 16)
+    }
+  }, [footerRef.current])
+
+  useEffect(() => {
     const timestamp = searchParams.get("timestamp")
     const urlList = JSON.parse(localStorage.getItem(`generatedImgList_${timestamp}`) ?? "[]")
 
@@ -35,10 +46,16 @@ const ImagePreselection = () => {
     <Container>
       <Wrapper>
         <Flex flexDirection="column" w={"100%"}>
-          <Flex flexGrow={"1"} alignItems={"center"} justifyContent={"center"}>
-            <Image src={imgUrlList[selectedImgIndex]} alt="" />
+          <Flex
+            // 2 / 4.5 分别是小图预览区的高度和 margin-top
+            h={`calc(100% - 2rem - 4.5rem - ${footerHeight}px)`}
+            flexGrow={"1"}
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
+            <Image objectFit={"contain"} w={"100%"} h={"100%"} src={imgUrlList[selectedImgIndex]} alt="" />
           </Flex>
-          <ImgSelctor>
+          <ImgSelctor footerHeight={footerHeight}>
             <For each={imgUrlList}>
               {(url: string, index: number) => {
                 return (
@@ -57,7 +74,7 @@ const ImagePreselection = () => {
               }}
             </For>
           </ImgSelctor>
-          <Footer>
+          <Footer ref={footerRef}>
             <Button
               w={"6.75rem"}
               bgColor={"#fff"}
@@ -120,7 +137,11 @@ const Wrapper = styled.div`
   background: #f5f5f5;
 `
 
-const ImgSelctor = styled.div`
+interface ImgSelctorProps {
+  footerHeight: number
+}
+
+const ImgSelctor = styled.div<ImgSelctorProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,7 +149,7 @@ const ImgSelctor = styled.div`
   height: 6rem;
 
   margin-top: 2rem;
-  margin-bottom: 4.5rem;
+  margin-bottom: ${props => props.footerHeight}px;
 
   & > img {
     margin-right: 0.5rem;
