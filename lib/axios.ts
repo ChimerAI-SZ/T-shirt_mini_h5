@@ -53,6 +53,7 @@ export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL || "/",
   timeout: 150000
 })
+
 // 保留拦截的用于请求后端转发 ideogram api 的 Axios 实例（
 export const instanceWithInterception = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL || "/",
