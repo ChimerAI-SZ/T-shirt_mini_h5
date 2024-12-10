@@ -37,7 +37,7 @@ export const viewport: Viewport = {
   userScalable: false
 }
 export const metadata: Metadata = {
-  title: "CHIMERAI X SIDA",
+  title: "CHIMER X 灵鹿未来",
   description:
     "Introducing CREAMODA, an unprecedented clothing generative engine. At CREAMODA, we offer an intelligent fashion platform designed to bring your creative ambitions to life. With our state-of-the-art generative clothing engine, CREAMODA transforms your vision into top-selling fashion, seamlessly and efficiently. Whether you’re shaping trends or creating unique designs, CREAMODA empowers you to bring your ideas to market with ease.",
   keywords: [

@@ -34,7 +34,7 @@ function Page({ show, noTitle, cb }: { show?: boolean; noTitle?: boolean; cb?: (
             textAlign="center"
             color={noTitle ? "transparent" : "#171717"}
           >
-            CHIMERAI X SIDA
+            CHIMER X 灵鹿未来
           </Text>
         }
       >
