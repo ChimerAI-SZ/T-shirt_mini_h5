@@ -37,7 +37,7 @@ declare global {
   }
 }
 const instance = axios.create({
-  baseURL: "https://www.creamoda.ai:11118",
+  baseURL: "https://x.creamoda.ai:11118",
   timeout: 30000
 })
 
