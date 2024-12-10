@@ -78,7 +78,6 @@ function Dashboard() {
   const [loadingTime, setLoadingTime] = useState(0) // 加载已用时间
 
   const [uploadedImgSrc, setUploadedImgSrc] = useState<string | null>(null) // 上传的图片的src
-  const [uploadedImgType, setUploadedImgType] = useState<"horizontal" | "vertical">("horizontal") // 上传的图片类型（横向还是竖向）
 
   const [generationOptions, setGenerationOptions] = useSetState<generationOptionsType>({
     // 固定配置
@@ -114,7 +113,6 @@ function Dashboard() {
         reader.onload = e => {
           if (typeof e.target?.result === "string") {
             setUploadedImgSrc(e.target.result)
-            loadImageDimensions(e.target.result)
           }
         }
         reader.readAsDataURL(file)
@@ -122,24 +120,6 @@ function Dashboard() {
       }
     }
     fileInput.click()
-  }
-
-  const loadImageDimensions = (src: string) => {
-    const img = new Image()
-    img.src = src
-    img.onload = () => {
-      const width = img.width
-      const height = img.height
-
-      if (height / width < imgContainerRatio) {
-        setUploadedImgType("vertical") // 竖向图片
-      } else {
-        setUploadedImgType("horizontal") // 正方形图片
-      }
-    }
-    img.onerror = (error: any) => {
-      console.error("Error loading image dimensions:", error)
-    }
   }
 
   // 选择图片的比例方向（横向、竖向、正方形）
@@ -465,12 +445,7 @@ function Dashboard() {
                   }
                 >
                   {uploadedImgSrc && (
-                    <Show
-                      when={uploadedImgType === "horizontal"}
-                      fallback={<ChakraImage h={"100%"} src={uploadedImgSrc} alt="Preview" />}
-                    >
-                      <ChakraImage w={"100%"} src={uploadedImgSrc} alt="Preview" />
-                    </Show>
+                    <ChakraImage w={"100%"} h={"100%"} objectFit={"contain"} src={uploadedImgSrc} alt="Preview" />
                   )}
                 </Show>
               </Flex>
