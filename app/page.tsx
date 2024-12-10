@@ -221,7 +221,7 @@ function Dashboard() {
           }
         })
 
-        formData.append("image_weight", "50")
+        formData.append("image_weight", "20")
 
         const [err, res] = await generateImageByRemix(formData)
 
